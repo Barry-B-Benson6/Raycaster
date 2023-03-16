@@ -83,9 +83,7 @@ Public Class frmMain
                 Dim value = collision.value
                 Dim point = collision.Point
 
-
-                Dim vectorBetween = New PointF(point.X - player.pntLocation.X, point.Y - player.pntLocation.Y)
-                Dim distance = Math.Sqrt(Math.Pow(vectorBetween.X, 2) + Math.Pow(vectorBetween.Y, 2))
+                Dim distance = DistanceBetweenTwoPoints(player.pntLocation, point)
                 Dim sectionWidth = Me.Width / rays.Count
                 Dim rectLeft = i * sectionWidth
 
@@ -138,10 +136,20 @@ Public Class frmMain
                 ''SightPoint in gamespace
                 Dim Sight As PointF = player.SeeBullet(Bullets(i), rays(j).decDiff)
                 If (Sight = Nothing) Then Continue For
-                ''SightPoint relative to player (needed for distance calculation)
-                Dim SightVector As PointF = New PointF(Sight.X - player.pntLocation.X, Sight.Y - player.pntLocation.Y)
-                ''Distance found with pythag
-                sightDistance = Math.Sqrt(Math.Pow(SightVector.X, 2) + Math.Pow(SightVector.Y, 2))
+
+                sightDistance = DistanceBetweenTwoPoints(player.pntLocation, Sight)
+
+                Dim rayCollision As Ray.Collision = rays(j).CheckCollision(Map, player)
+
+                ''TODO: ThIS MAKE THE BULLETS KINDA FUNKY, FIX IT
+
+                '''Check if the current ray can also see a wall
+                'If (rayCollision.Point <> Nothing) Then
+                '    Dim wallDistance = DistanceBetweenTwoPoints(player.pntLocation, rayCollision.Point)
+                '    ''check if the wall is obscuring the bullet
+                '    If (wallDistance < sightDistance) Then Continue For
+                'End If
+
                 ''add rayIndex to list of rays that can see the bullet
                 raysOfSight.Add(j)
             Next
