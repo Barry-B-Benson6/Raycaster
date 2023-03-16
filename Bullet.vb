@@ -1,26 +1,25 @@
-﻿Public Class Bullet
+﻿Public Class Bullet : Inherits Entity
     Public decAngle As Decimal
-    Public pntLocation As PointF
-    Public Bounds As RectangleF
     Private Movements As UInt32
     Public Sub New(Angle As Decimal, point As PointF)
+        MyBase.New(point, New SizeF(0.4, 0.4))
         decAngle = Angle
-        pntLocation = point
-        Bounds = New RectangleF(New PointF(point.X - 0.2, point.Y - 0.2), New SizeF(0.4, 0.4))
         Movements = 0
     End Sub
 
     Public Sub Move(Map As Byte(,))
         pntLocation.X -= Math.Cos(decAngle) * 1
         pntLocation.Y -= Math.Sin(decAngle) * 1
-        Bounds = New RectangleF(New PointF(pntLocation.X - 0.2, pntLocation.Y - 0.2), New SizeF(0.4, 0.4))
+        Bounds.Location = New PointF(pntLocation.X - (Bounds.Size.Width / 2), pntLocation.Y - (Bounds.Size.Height / 2))
         Movements += 1
 
         If (Map(Math.Floor(pntLocation.X), Math.Floor(pntLocation.Y)) <> 0) Then
             Movements = 501
         End If
+    End Sub
 
-
+    Public Overrides Sub Draw(Distance As Decimal, xLocationOfMiddle As Decimal, e As PaintEventArgs)
+        Throw New NotImplementedException()
     End Sub
 
     Public ReadOnly Property expired As Boolean

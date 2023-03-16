@@ -48,8 +48,8 @@ Public Class frmMain
         player = New Player()
         rays = New List(Of Ray)
         Bullets = New List(Of Bullet)
-        For i = 0 To 720
-            Dim diff = (Math.PI / 4) - ((i / 8) * (Math.PI / 180))
+        For i = 0 To 360
+            Dim diff = (Math.PI / 4) - ((i / 4) * (Math.PI / 180))
             Dim ray = New Ray((player.decAngle - diff), -diff)
             rays.Add(ray)
         Next
