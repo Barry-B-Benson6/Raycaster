@@ -5,59 +5,55 @@ Public Class Player
     Public pntLocation As PointF
     Public decAngle As Decimal
     Public decVerticalAngle As Decimal
+    Public Movement As MovementState
     Public Sub New()
         pntLocation = New PointF(1.5, 1.5)
         decAngle = Math.PI
+        Movement = New MovementState()
     End Sub
 
-    Public Sub Move(e As KeyEventArgs, Map As Byte(,))
+    Public Sub Move(Map As Byte(,))
         Dim oldPoint = pntLocation
-        Select Case e.KeyCode
-            Case Keys.D
-                'player.decAngle += (Math.PI * 2) / 180
-            Case Keys.A
-                'player.decAngle -= (Math.PI * 2) / 180
-            Case Keys.W
-                pntLocation.X -= Math.Cos(decAngle) * 0.1
-                pntLocation.Y -= Math.Sin(decAngle) * 0.1
-                Try
-                    If (Map(Math.Floor(pntLocation.X), Math.Floor(pntLocation.Y)) > 0) Then
-                        Dim x = Math.Floor(pntLocation.X)
-                        Dim y = Math.Floor(pntLocation.Y)
-                        Dim xOLd = Math.Floor(oldPoint.X)
-                        Dim yOLd = Math.Floor(oldPoint.Y)
+        If Movement.right Then
+            pntLocation.X -= Math.Cos(decAngle + Math.PI / 2) * 0.1
+            pntLocation.Y -= Math.Sin(decAngle + Math.PI / 2) * 0.1
+            HandleWallCollisions(Map, oldPoint)
+        End If
+        If Movement.Left Then
+            pntLocation.X -= Math.Cos(decAngle - Math.PI / 2) * 0.1
+            pntLocation.Y -= Math.Sin(decAngle - Math.PI / 2) * 0.1
+            HandleWallCollisions(Map, oldPoint)
+        End If
+        If Movement.Forward Then
+            pntLocation.X -= Math.Cos(decAngle) * 0.1
+            pntLocation.Y -= Math.Sin(decAngle) * 0.1
+            HandleWallCollisions(Map, oldPoint)
+        End If
+        If Movement.Backward Then
+            pntLocation.X += Math.Cos(decAngle) * 0.1
+            pntLocation.Y += Math.Sin(decAngle) * 0.1
+            HandleWallCollisions(Map, oldPoint)
+        End If
+    End Sub
 
-                        If (x <> xOLd And y <> yOLd) Then
-                            pntLocation = oldPoint
-                        ElseIf (x <> xOLd) Then
-                            pntLocation.X = oldPoint.X
-                        Else
-                            pntLocation.Y = oldPoint.Y
-                        End If
-                    End If
-                Catch
-                End Try
-            Case Keys.S
-                pntLocation.X += Math.Cos(decAngle) * 0.1
-                pntLocation.Y += Math.Sin(decAngle) * 0.1
-                Try
-                    If (Map(Math.Floor(pntLocation.X), Math.Floor(pntLocation.Y)) > 0) Then
-                        Dim x = Math.Floor(pntLocation.X)
-                        Dim y = Math.Floor(pntLocation.Y)
-                        Dim xOLd = Math.Floor(oldPoint.X)
-                        Dim yOLd = Math.Floor(oldPoint.Y)
+    Private Sub HandleWallCollisions(Map As Byte(,), oldPoint As PointF)
+        Try
+            If (Map(Math.Floor(pntLocation.X), Math.Floor(pntLocation.Y)) > 0) Then
+                Dim x = Math.Floor(pntLocation.X)
+                Dim y = Math.Floor(pntLocation.Y)
+                Dim xOLd = Math.Floor(oldPoint.X)
+                Dim yOLd = Math.Floor(oldPoint.Y)
 
-                        If (x <> xOLd And y <> yOLd) Then
-                            pntLocation = oldPoint
-                        ElseIf (x <> xOLd) Then
-                            pntLocation.X = oldPoint.X
-                        Else
-                            pntLocation.Y = oldPoint.Y
-                        End If
-                    End If
-                Catch
-                End Try
-        End Select
+                If (x <> xOLd And y <> yOLd) Then
+                    pntLocation = oldPoint
+                ElseIf (x <> xOLd) Then
+                    pntLocation.X = oldPoint.X
+                Else
+                    pntLocation.Y = oldPoint.Y
+                End If
+            End If
+        Catch
+        End Try
     End Sub
 
 
@@ -121,4 +117,15 @@ Public Class Player
         Dim theta = interiorAngle - Math.PI / 2
         Return theta
     End Function
+
+    Class MovementState
+        Public Forward As Boolean
+        Public Backward As Boolean
+        Public Left As Boolean
+        Public right As Boolean
+
+        Public Sub New()
+
+        End Sub
+    End Class
 End Class

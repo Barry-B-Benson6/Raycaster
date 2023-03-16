@@ -223,10 +223,39 @@ Public Class frmMain
         'e.Graphics.DrawString(player.decAngle * 180 / Math.PI, Font, New SolidBrush(Color.White), New PointF(0, 0))
 #End Region
 
+        player.Move(Map)
+        e.Graphics.ResetTransform()
+        e.Graphics.DrawString(player.Movement.Forward.ToString(), Me.Font, New SolidBrush(Color.Black), New PointF(0, 4))
+        e.Graphics.DrawString(player.Movement.Backward.ToString(), Me.Font, New SolidBrush(Color.Black), New PointF(0, 8))
+        e.Graphics.DrawString(player.Movement.Left.ToString(), Me.Font, New SolidBrush(Color.Black), New PointF(0, 12))
+        e.Graphics.DrawString(player.Movement.right.ToString(), Me.Font, New SolidBrush(Color.Black), New PointF(0, 16))
+
     End Sub
 
     Private Sub frmMain_KeyDown(sender As Object, e As KeyEventArgs) Handles MyBase.KeyDown
-        player.Move(e, Map)
+        Select Case (e.KeyCode)
+            Case Keys.W
+                player.Movement.Forward = True
+            Case Keys.S
+                player.Movement.Backward = True
+            Case Keys.A
+                player.Movement.Left = True
+            Case Keys.D
+                player.Movement.right = True
+        End Select
+    End Sub
+
+    Private Sub frmMain_KeyUp(sender As Object, e As KeyEventArgs) Handles MyBase.KeyUp
+        Select Case (e.KeyCode)
+            Case Keys.W
+                player.Movement.Forward = False
+            Case Keys.S
+                player.Movement.Backward = False
+            Case Keys.A
+                player.Movement.Left = False
+            Case Keys.D
+                player.Movement.right = False
+        End Select
     End Sub
 
     Private Sub Timer1_Tick(sender As Object, e As EventArgs) Handles Timer1.Tick
