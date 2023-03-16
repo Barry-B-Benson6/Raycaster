@@ -155,8 +155,8 @@ Public Class frmMain
             ''Find the x coord of where the center of the bullet will be drawn
             Dim rectleft = rayIndex * sectionwidth
             If (sightDistance = 0) Then Continue For
-            Dim size = New Size((Me.Height / 5 / sightDistance), (Me.Height / 5 / sightDistance))
-            e.Graphics.FillEllipse(New SolidBrush(Color.Gold), New Rectangle(New Point(rectleft - (size.Width / 2), Middle - size.Height / 2), size))
+
+            Bullets(i).Draw(sightDistance, rectleft, e, Me.Size)
         Next
 
         ''Draw Gun
