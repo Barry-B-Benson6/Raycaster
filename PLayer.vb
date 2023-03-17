@@ -19,15 +19,14 @@ Public Class Player
 
     Public ReadOnly Property Height
         Get
-            ''g = -1
-            ''h = -(1/3)g + (1/2)g(x-1)^2
-            Return ((1 / 2) - (0.5 * Math.Pow(Movement.PointInJump - 1, 2))) * (2 / 3)
+            ''h = -2(x)(x-1)
+            Return -(2 / 3) * (Movement.PointInJump) * (Movement.PointInJump - 1.5)
         End Get
     End Property
 
     Public Sub Jump()
         If (Movement.PointInJump <> 0) Then Return
-        Movement.PointInJump = 2
+        Movement.PointInJump = 1.5
     End Sub
 
     Public Sub Move(Map As Byte(,))
