@@ -18,10 +18,11 @@
         End If
     End Sub
 
-    Public Overrides Sub Draw(Distance As Decimal, xLocationOfMiddle As Decimal, e As PaintEventArgs, formSize As Size)
+    Public Overrides Sub Draw(Distance As Decimal, xLocationOfMiddle As Decimal, e As PaintEventArgs, formSize As Size, playerHeight As Double)
         Dim size = New Size((formSize.Height / 5 / Distance), (formSize.Height / 5 / Distance))
         Dim Middle = formSize.Height / 2
-        e.Graphics.FillEllipse(New SolidBrush(Color.Gold), New Rectangle(New Point(xLocationOfMiddle - (size.Width / 2), Middle - size.Height / 2), size))
+        Dim yOffset = playerHeight * (formSize.Height / Distance)
+        e.Graphics.FillEllipse(New SolidBrush(Color.Gold), New Rectangle(New Point(xLocationOfMiddle - (size.Width / 2), Middle - (size.Height / 2) + yOffset), size))
     End Sub
 
     Public ReadOnly Property expired As Boolean

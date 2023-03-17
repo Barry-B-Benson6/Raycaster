@@ -165,7 +165,7 @@ Public Class frmMain
             Dim rectleft = rayIndex * sectionwidth
             If (sightDistance = 0) Then Continue For
 
-            Bullets(i).Draw(sightDistance, rectleft, e, Me.Size)
+            Bullets(i).Draw(sightDistance, rectleft, e, Me.Size, player.Height)
         Next
 
         ''Draw Gun
