@@ -176,7 +176,7 @@ Public Class frmMain
             e.Graphics.TranslateTransform(Me.Width / 2, Me.Height / 2)
             If (player.Movement.Moving) Then e.Graphics.TranslateTransform(0, Rnd() * 5)
             Dim gun = My.Resources.Resources.Hip_Gun
-            e.Graphics.DrawImage(gun, New Rectangle(0, 0, Me.Width / 2, Me.Height / 2))
+            e.Graphics.DrawImage(gun, New Rectangle(-(Me.Width / 32), 0, Me.Width / 2, Me.Height / 2))
         End If
 
 #Region "MiniMapDraw"
