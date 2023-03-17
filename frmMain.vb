@@ -107,7 +107,8 @@ Public Class frmMain
                         colour = Color.FromArgb(0, 0, 255 * percent)
                 End Select
 
-                e.Graphics.FillRectangle(New SolidBrush(colour), New Rectangle(New Point(rectLeft, Middle - (height / 2)), New Size(sectionWidth + 1, height)))
+                Dim yOffset = player.Height * height
+                e.Graphics.FillRectangle(New SolidBrush(colour), New Rectangle(New Point(rectLeft, Middle - (height / 2) + yOffset), New Size(sectionWidth + 1, height)))
 
             End If
 
@@ -242,6 +243,8 @@ Public Class frmMain
                 player.Movement.Left = True
             Case Keys.D
                 player.Movement.right = True
+            Case Keys.Space
+                player.Jump()
         End Select
     End Sub
 

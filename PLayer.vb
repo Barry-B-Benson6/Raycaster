@@ -16,9 +16,11 @@ Public Class Player
         Velocity = 0
     End Sub
 
-    Public ReadOnly Property Height As Boolean
+    Public ReadOnly Property Height
         Get
-            Return (0.5 - Math.Pow(Movement.PointInJump - 1, 2))
+            ''g = -1
+            ''h = -(1/3)g + (1/2)g(x-1)^2
+            Return ((1 / 2) - (0.5 * Math.Pow(Movement.PointInJump - 1, 2))) * (2 / 3)
         End Get
     End Property
 
@@ -28,6 +30,10 @@ Public Class Player
     End Sub
 
     Public Sub Move(Map As Byte(,))
+        If (Movement.PointInJump > 0) Then
+            Movement.PointInJump -= 0.1
+            Movement.PointInJump = Math.Clamp(Movement.PointInJump, 0, 2)
+        End If
         If (Movement.Moving) Then
             Velocity += 0.01
             Velocity = Math.Clamp(Velocity, 0, maxVelocity)
