@@ -61,7 +61,27 @@ Public Class Player
         ''Now normalize movement
         Dim currentLength = LengthOfVector(movementVector)
         movementVector = New PointF(movementVector.X / currentLength * Velocity, movementVector.Y / currentLength * Velocity)
+
+        'ExperimentalWallCollisions(Map, pntLocation, movementVector)
         HandleWallCollisions(Map, oldPoint, movementVector)
+    End Sub
+
+    Private Sub ExperimentalWallCollisions(Map As Byte(,), currentPos As PointF, movementVector As PointF)
+        Dim movedPos = New PointF(currentPos.X + movementVector.Y, currentPos.Y + movementVector.Y)
+
+        ''Check Vertical Movement
+        If (Map(Math.Floor(currentPos.X), Math.Floor(movedPos.Y)) <> 0) Then
+            ''If moving verticaly would go into a wall then dont 
+            movementVector.Y = 0
+        End If
+
+        ''Check Horizontal Movement
+        If (Map(Math.Floor(movedPos.X), Math.Floor(currentPos.Y)) <> 0) Then
+            ''If moving horizontally would go into a wall then dont 
+            movementVector.X = 0
+        End If
+
+        pntLocation = New PointF(currentPos.X + movementVector.X, currentPos.Y + movementVector.Y)
     End Sub
 
     Private Sub HandleWallCollisions(Map As Byte(,), oldPoint As PointF, movementVector As PointF)
