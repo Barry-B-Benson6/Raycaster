@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.2.32630.192
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Ray", "Ray.vbproj", "{DF7A7C08-5502-4170-9DF7-186AE572D0C2}"
+Project("{778DAE3C-4631-46EA-AA77-85C1314464D9}") = "Ray", "Ray.vbproj", "{DF7A7C08-5502-4170-9DF7-186AE572D0C2}"
+EndProject
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "WinShooter", "..\WinShooter\WinShooter.vbproj", "{DC8EA045-3C0F-4A24-94B6-94DC94515E04}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{DF7A7C08-5502-4170-9DF7-186AE572D0C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DF7A7C08-5502-4170-9DF7-186AE572D0C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DF7A7C08-5502-4170-9DF7-186AE572D0C2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DC8EA045-3C0F-4A24-94B6-94DC94515E04}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DC8EA045-3C0F-4A24-94B6-94DC94515E04}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DC8EA045-3C0F-4A24-94B6-94DC94515E04}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DC8EA045-3C0F-4A24-94B6-94DC94515E04}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

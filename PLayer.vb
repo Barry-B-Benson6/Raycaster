@@ -19,7 +19,7 @@ Public Class Player
 
     Public ReadOnly Property Height
         Get
-            ''h = -2(x)(x-1)
+            ''h = -2/3(x)(x-1.5)
             Return -(2 / 3) * (Movement.PointInJump) * (Movement.PointInJump - 1.5)
         End Get
     End Property
