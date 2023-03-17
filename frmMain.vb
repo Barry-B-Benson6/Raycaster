@@ -36,7 +36,7 @@ Public Class frmMain
             {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
             {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
             {1, 0, 0, 0, 0, 0, 0, 0, 3, 3, 0, 0, 0, 0, 0, 1},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+            {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
             {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
             {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1},
             {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1},
@@ -169,10 +169,15 @@ Public Class frmMain
         Next
 
         ''Draw Gun
-        e.Graphics.TranslateTransform(Me.Width / 2, Me.Height / 2)
-        e.Graphics.TranslateTransform(0, Rnd() * 5)
-        e.Graphics.RotateTransform(45)
-        e.Graphics.DrawImage(My.Resources.Resources.SeekPng_com_ak_47_png_169312, New Point(0, 0))
+        If (player.isADS) Then
+            Dim gun = My.Resources.Resources.ADS_gun
+            e.Graphics.DrawImage(gun, New Point((Me.Width / 2) - (gun.Width / 2), Me.Height - gun.Height))
+        Else
+            e.Graphics.TranslateTransform(Me.Width / 2, Me.Height / 2)
+            If (player.Movement.Moving) Then e.Graphics.TranslateTransform(0, Rnd() * 5)
+            Dim gun = My.Resources.Resources.Hip_Gun
+            e.Graphics.DrawImage(gun, New Rectangle(0, 0, Me.Width / 2, Me.Height / 2))
+        End If
 
 #Region "MiniMapDraw"
         '_______________________________________________________________________________________________________
@@ -281,6 +286,18 @@ Public Class frmMain
     End Sub
 
     Private Sub frmMain_MouseDown(sender As Object, e As MouseEventArgs) Handles MyBase.MouseDown
-        Bullets.Add(New Bullet(player.decAngle, player.pntLocation))
+
+        Select Case e.Button
+            Case MouseButtons.Left
+                Bullets.Add(New Bullet(player.decAngle, player.pntLocation))
+            Case MouseButtons.Right
+                player.isADS = True
+        End Select
+    End Sub
+
+    Private Sub frmMain_MouseUp(sender As Object, e As MouseEventArgs) Handles MyBase.MouseUp
+        If (e.Button = MouseButtons.Right) Then
+            player.isADS = False
+        End If
     End Sub
 End Class

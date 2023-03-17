@@ -8,6 +8,7 @@ Public Class Player
     Public Movement As MovementState
     Private Velocity As Double
     Private maxVelocity As Double
+    Public isADS As Boolean
     Public Sub New()
         pntLocation = New PointF(1.5, 1.5)
         maxVelocity = 0.2

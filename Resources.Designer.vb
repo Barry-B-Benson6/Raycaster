@@ -67,6 +67,26 @@ Namespace My.Resources
         '''<summary>
         '''  Looks up a localized resource of type System.Drawing.Bitmap.
         '''</summary>
+        Friend Shared ReadOnly Property ADS_gun() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("ADS_gun", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized resource of type System.Drawing.Bitmap.
+        '''</summary>
+        Friend Shared ReadOnly Property Hip_Gun() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("Hip_Gun", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized resource of type System.Drawing.Bitmap.
+        '''</summary>
         Friend Shared ReadOnly Property SeekPng_com_ak_47_png_169312() As System.Drawing.Bitmap
             Get
                 Dim obj As Object = ResourceManager.GetObject("SeekPng_com_ak_47_png_169312", resourceCulture)
