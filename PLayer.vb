@@ -6,41 +6,64 @@ Public Class Player
     Public decAngle As Decimal
     Public decVerticalAngle As Decimal
     Public Movement As MovementState
+    Private Velocity As Double
+    Private maxVelocity As Double
     Public Sub New()
         pntLocation = New PointF(1.5, 1.5)
+        maxVelocity = 0.2
         decAngle = Math.PI
         Movement = New MovementState()
+        Velocity = 0
+    End Sub
+
+    Public ReadOnly Property Height As Boolean
+        Get
+            Return (0.5 - Math.Pow(Movement.PointInJump - 1, 2))
+        End Get
+    End Property
+
+    Public Sub Jump()
+        If (Movement.PointInJump <> 0) Then Return
+        Movement.PointInJump = 2
     End Sub
 
     Public Sub Move(Map As Byte(,))
+        If (Movement.Moving) Then
+            Velocity += 0.01
+            Velocity = Math.Clamp(Velocity, 0, maxVelocity)
+        Else
+            Velocity = 0
+        End If
         Dim oldPoint = pntLocation
+        Dim movementVector = New PointF(0, 0)
         If Movement.right Then
-            pntLocation.X -= Math.Cos(decAngle + Math.PI / 2) * 0.1
-            pntLocation.Y -= Math.Sin(decAngle + Math.PI / 2) * 0.1
-            HandleWallCollisions(Map, oldPoint)
+            movementVector.X -= Math.Cos(decAngle + Math.PI / 2) * 0.1
+            movementVector.Y -= Math.Sin(decAngle + Math.PI / 2) * 0.1
         End If
         If Movement.Left Then
-            pntLocation.X -= Math.Cos(decAngle - Math.PI / 2) * 0.1
-            pntLocation.Y -= Math.Sin(decAngle - Math.PI / 2) * 0.1
-            HandleWallCollisions(Map, oldPoint)
+            movementVector.X -= Math.Cos(decAngle - Math.PI / 2) * 0.1
+            movementVector.Y -= Math.Sin(decAngle - Math.PI / 2) * 0.1
         End If
         If Movement.Forward Then
-            pntLocation.X -= Math.Cos(decAngle) * 0.1
-            pntLocation.Y -= Math.Sin(decAngle) * 0.1
-            HandleWallCollisions(Map, oldPoint)
+            movementVector.X -= Math.Cos(decAngle) * 0.1
+            movementVector.Y -= Math.Sin(decAngle) * 0.1
         End If
         If Movement.Backward Then
-            pntLocation.X += Math.Cos(decAngle) * 0.1
-            pntLocation.Y += Math.Sin(decAngle) * 0.1
-            HandleWallCollisions(Map, oldPoint)
+            movementVector.X += Math.Cos(decAngle) * 0.1
+            movementVector.Y += Math.Sin(decAngle) * 0.1
         End If
+        ''Now normalize movement
+        Dim currentLength = LengthOfVector(movementVector)
+        movementVector = New PointF(movementVector.X / currentLength * Velocity, movementVector.Y / currentLength * Velocity)
+        HandleWallCollisions(Map, oldPoint, movementVector)
     End Sub
 
-    Private Sub HandleWallCollisions(Map As Byte(,), oldPoint As PointF)
+    Private Sub HandleWallCollisions(Map As Byte(,), oldPoint As PointF, movementVector As PointF)
+        Dim newPoint = New PointF(oldPoint.X + movementVector.X, oldPoint.Y + movementVector.Y)
         Try
-            If (Map(Math.Floor(pntLocation.X), Math.Floor(pntLocation.Y)) > 0) Then
-                Dim x = Math.Floor(pntLocation.X)
-                Dim y = Math.Floor(pntLocation.Y)
+            If (Map(Math.Floor(newPoint.X), Math.Floor(newPoint.Y)) > 0) Then
+                Dim x = Math.Floor(newPoint.X)
+                Dim y = Math.Floor(newPoint.Y)
                 Dim xOLd = Math.Floor(oldPoint.X)
                 Dim yOLd = Math.Floor(oldPoint.Y)
 
@@ -51,6 +74,8 @@ Public Class Player
                 Else
                     pntLocation.Y = oldPoint.Y
                 End If
+            Else
+                pntLocation = newPoint
             End If
         Catch
         End Try
@@ -111,7 +136,7 @@ Public Class Player
     End Function
 
 
-    Private Function AngleBetweenTwoPoints(Point1 As Vector2, Point2 As Vector2)
+    Private Function AngleBetweenTwoPoints(Point1 As Vector2, Point2 As Vector2) As Double
         Dim offsetPoint = Vector2.Add(Point2, -Point1)
         Dim interiorAngle = Math.Atan2(-offsetPoint.Y, offsetPoint.X)
         Dim theta = interiorAngle - Math.PI / 2
@@ -123,9 +148,16 @@ Public Class Player
         Public Backward As Boolean
         Public Left As Boolean
         Public right As Boolean
+        Public PointInJump As Double
 
         Public Sub New()
 
         End Sub
+
+        Public ReadOnly Property Moving As Boolean
+            Get
+                Return Forward Or Backward Or Left Or right
+            End Get
+        End Property
     End Class
 End Class

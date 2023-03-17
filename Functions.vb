@@ -4,4 +4,12 @@
         ''Distance found with pythag
         Return Math.Sqrt(Math.Pow(SightVector.X, 2) + Math.Pow(SightVector.Y, 2))
     End Function
+
+    Public Function Lerp(Initial As Double, Final As Double, speed As Double)
+        Return (Final - Initial) * speed + Initial
+    End Function
+
+    Public Function LengthOfVector(vector As PointF)
+        Return Math.Sqrt(Math.Pow(vector.X, 2) + Math.Pow(vector.Y, 2))
+    End Function
 End Module
