@@ -27,4 +27,8 @@
     Public Sub Jump()
 
     End Sub
+
+    Public Overrides Sub UpdatePostion()
+        Throw New NotImplementedException()
+    End Sub
 End Class

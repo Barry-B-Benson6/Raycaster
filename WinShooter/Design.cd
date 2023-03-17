@@ -34,21 +34,21 @@
   <Class Name="WinShooter.BulletMotionModal">
     <Position X="5.25" Y="3.75" Width="1.75" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAQAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>BulletMotionModal.vb</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="WinShooter.NetworkMotionModal">
     <Position X="9.25" Y="3.75" Width="1.75" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAA=</HashCode>
+      <HashCode>AAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAA=</HashCode>
       <FileName>NetworkMotionModal.vb</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="WinShooter.ClientMotionModal">
     <Position X="7.25" Y="3.75" Width="1.75" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAgAAAAAAAAAAAAgCAEAAAACAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAQAAAAgAAAAAAAAAAAAgCAEAAAACAAAAAAAAAAAA=</HashCode>
       <FileName>ClientMotionModal.vb</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
