@@ -1,9 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ClassDiagram MajorVersion="1" MinorVersion="1">
   <Class Name="WinShooter.Entity">
-    <Position X="1.5" Y="0.5" Width="1.5" />
+    <Position X="1.5" Y="1" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Properties" Collapsed="true" />
+    </Compartments>
     <TypeIdentifier>
-      <HashCode>AQAAAAAIAAIAACAgAAAAAAQAAAgAAAAAABAABAAAAAA=</HashCode>
+      <HashCode>AQAAAAAIAAIAACAgAAAAAAQAAAhAAAAAABAABAAAAAA=</HashCode>
       <FileName>Entity.vb</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>

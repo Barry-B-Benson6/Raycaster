@@ -15,13 +15,13 @@
         End Set
     End Property
 
-    Public Property Position As Integer
+    Public Property Position As GamePosition
         Get
             SyncLock Me
                 Return Nothing
             End SyncLock
         End Get
-        Set(value As Integer)
+        Set(value As GamePosition)
             SyncLock Me
 
             End SyncLock
@@ -56,6 +56,19 @@
         Get
             Return Nothing
         End Get
+    End Property
+
+    Public Property Motion As WinShooter.Motion
+        Get
+            SyncLock Me
+                Return Nothing
+            End SyncLock
+        End Get
+        Set(value As WinShooter.Motion)
+            SyncLock Me
+
+            End SyncLock
+        End Set
     End Property
 
     ''' <remarks></remarks>
