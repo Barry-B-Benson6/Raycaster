@@ -7,6 +7,8 @@ Project("{778DAE3C-4631-46EA-AA77-85C1314464D9}") = "Ray", "Ray.vbproj", "{DF7A7
 EndProject
 Project("{778DAE3C-4631-46EA-AA77-85C1314464D9}") = "WinShooter", "WinShooter\WinShooter.vbproj", "{5F77977E-EF3D-498C-BC30-97FB2EDEA13E}"
 EndProject
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "UnitTestsWinShooter", "UnitTestsWinShooter\UnitTestsWinShooter.vbproj", "{4B0692F8-3841-4437-925B-94CF60EAFDF5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{5F77977E-EF3D-498C-BC30-97FB2EDEA13E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5F77977E-EF3D-498C-BC30-97FB2EDEA13E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5F77977E-EF3D-498C-BC30-97FB2EDEA13E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4B0692F8-3841-4437-925B-94CF60EAFDF5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4B0692F8-3841-4437-925B-94CF60EAFDF5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4B0692F8-3841-4437-925B-94CF60EAFDF5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4B0692F8-3841-4437-925B-94CF60EAFDF5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

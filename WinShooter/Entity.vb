@@ -1,11 +1,4 @@
 ﻿Public MustInherit Class Entity
-    Public Property MotionModal As MotionModal
-        Get
-            Return Nothing
-        End Get
-        Set(value As MotionModal)
-        End Set
-    End Property
 
     Public Property IsAlive As Integer
         Get
@@ -36,11 +29,11 @@
         End Set
     End Property
 
-    Public Property EntityId As Integer
+    Public Property EntityId As Guid
         Get
             Return Nothing
         End Get
-        Set(value As Integer)
+        Set(value As Guid)
         End Set
     End Property
 

@@ -11,8 +11,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="UnitTestsWinShooter\**" />
     <Compile Remove="WinShooter\**" />
+    <EmbeddedResource Remove="UnitTestsWinShooter\**" />
     <EmbeddedResource Remove="WinShooter\**" />
+    <None Remove="UnitTestsWinShooter\**" />
     <None Remove="WinShooter\**" />
   </ItemGroup>
 

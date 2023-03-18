@@ -1,9 +1,9 @@
 ﻿Public Class HUD
-    Public Property OwnPlayer As WinShooter.OwnPlayer
+    Public Property OwnPlayer As WinShooter.Player
         Get
             Return Nothing
         End Get
-        Set(value As WinShooter.OwnPlayer)
+        Set(value As WinShooter.Player)
         End Set
     End Property
 

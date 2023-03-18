@@ -1,25 +1,12 @@
 ﻿Public Class GameVelocity
-    Public Property East As Decimal
-        Get
-            Return Nothing
-        End Get
-        Set(value As Decimal)
-        End Set
-    End Property
+    Public Sub New(east As Decimal, north As Decimal, up As Decimal)
+        Me.East = east
+        Me.North = north
+        Me.Up = up
+    End Sub
+    Public ReadOnly Property East As Decimal
 
-    Public Property North As Decimal
-        Get
-            Return Nothing
-        End Get
-        Set(value As Decimal)
-        End Set
-    End Property
+    Public ReadOnly Property North As Decimal
 
-    Public Property Up As Decimal
-        Get
-            Return Nothing
-        End Get
-        Set(value As Decimal)
-        End Set
-    End Property
+    Public ReadOnly Property Up As Decimal
 End Class
