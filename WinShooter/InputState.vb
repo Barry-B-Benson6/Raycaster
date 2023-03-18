@@ -1,57 +1,54 @@
 ﻿Public Class InputState
+    Sub New()
+    End Sub
+
     Public Property Forward As Boolean
-        Get
-            Return Nothing
-        End Get
-        Set(value As Boolean)
-        End Set
-    End Property
 
     Public Property Backward As Boolean
-        Get
-            Return Nothing
-        End Get
-        Set(value As Boolean)
-        End Set
-    End Property
 
     Public Property Left As Boolean
-        Get
-            Return Nothing
-        End Get
-        Set(value As Boolean)
-        End Set
-    End Property
 
     Public Property Right As Boolean
-        Get
-            Return Nothing
-        End Get
-        Set(value As Boolean)
-        End Set
-    End Property
 
     Public Property Firing As Boolean
-        Get
-            Return Nothing
-        End Get
-        Set(value As Boolean)
-        End Set
-    End Property
 
     Public Property Aiming As Boolean
-        Get
-            Return Nothing
-        End Get
-        Set(value As Boolean)
-        End Set
-    End Property
 
     Public Property Crouching As Integer
-        Get
-            Return Nothing
-        End Get
-        Set(value As Integer)
-        End Set
-    End Property
+
+    ''' <summary>
+    '''     Updates the input state based off the new keyboard input.
+    ''' </summary>
+    ''' <param name="Key">The Keyboard key that was used (likely e.KeyCode)</param>
+    ''' <param name="isKeyDown">Whether the key is being pressed or released</param>
+    Public Sub Update(Key As Keys, isKeyDown As Boolean)
+        RequireNotNull(Key)
+        Select Case Key
+            Case Keys.A
+                Left = isKeyDown
+            Case Keys.D
+                Right = isKeyDown
+            Case Keys.W
+                Forward = isKeyDown
+            Case Keys.S
+                Backward = isKeyDown
+            Case Keys.LControlKey
+                Crouching = isKeyDown
+        End Select
+    End Sub
+
+    ''' <summary>
+    '''     Updates the input state based off the new mouse input.
+    ''' </summary>
+    ''' <param name="Button">The Mouse button that was used (likely e.Button)</param>
+    ''' <param name="isKeyDown">Whether the key is being pressed or released</param>
+    Public Sub Update(Button As MouseButtons, isKeyDown As Boolean)
+        RequireNotNull(Button)
+        Select Case Button
+            Case MouseButtons.Left
+                Firing = isKeyDown
+            Case MouseButtons.Right
+                Aiming = isKeyDown
+        End Select
+    End Sub
 End Class

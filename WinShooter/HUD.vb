@@ -1,5 +1,5 @@
 ﻿Public Class HUD
-    Public Property OwnPlayer As WinShooter.Player
+    Public Property ClientPlayer As WinShooter.Player
         Get
             Return Nothing
         End Get

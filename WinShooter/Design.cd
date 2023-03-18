@@ -69,21 +69,21 @@
   <Class Name="WinShooter.HUD">
     <Position X="2.5" Y="9.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAABAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAA=</HashCode>
       <FileName>HUD.vb</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="WinShooter.GameMap">
     <Position X="5.25" Y="8.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAEAAAAAIAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAA=</HashCode>
       <FileName>GameMap.vb</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="WinShooter.GamePosition">
     <Position X="7.25" Y="1" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AACAAAAAACAQAAAAAAAAAAAAAAABAAAAAAAAAAABAAI=</HashCode>
+      <HashCode>AACAAAAAAAAQAAAAAAAAAAAAAAABAAAAAAAAAAABAAI=</HashCode>
       <FileName>GamePosition.vb</FileName>
     </TypeIdentifier>
   </Class>
