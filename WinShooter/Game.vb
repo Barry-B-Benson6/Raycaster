@@ -23,6 +23,14 @@
         End Set
     End Property
 
+    Public Property InputState As InputState
+        Get
+            Return Nothing
+        End Get
+        Set(value As InputState)
+        End Set
+    End Property
+
     Public Sub Start()
 
     End Sub

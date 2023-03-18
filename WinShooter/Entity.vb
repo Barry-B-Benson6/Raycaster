@@ -52,7 +52,7 @@
         End Set
     End Property
 
-    Public Overridable ReadOnly Property Updatable As Boolean
+    Public Overridable ReadOnly Property LocallyOwned As Boolean
         Get
             Return Nothing
         End Get

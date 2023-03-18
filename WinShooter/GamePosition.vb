@@ -38,4 +38,12 @@
         Set(value As Decimal)
         End Set
     End Property
+
+    ''' <summary>
+    ''' Returns true if this position corresponds to the edge or inside of a wall.
+    ''' </summary>
+    ''' <param name="map">The game map for reference.</param>
+    Public Sub IsInsideWall(map As GameMap)
+
+    End Sub
 End Class

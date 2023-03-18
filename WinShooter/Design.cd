@@ -1,69 +1,39 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ClassDiagram MajorVersion="1" MinorVersion="1">
   <Class Name="WinShooter.Entity">
-    <Position X="1.5" Y="1" Width="1.5" />
-    <Compartments>
-      <Compartment Name="Properties" Collapsed="true" />
-    </Compartments>
+    <Position X="1.5" Y="0.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AQAAAAAIAAIAACAgAAAAAAQAAAhAAAAAABAABAAAAAA=</HashCode>
+      <HashCode>AQAAAAAIAAIAACAgAAAACAQAAAhAAAAAAAAABAAAAAA=</HashCode>
       <FileName>Entity.vb</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
-      <Property Name="MotionModal" />
+      <Property Name="Motion" />
     </ShowAsAssociation>
   </Class>
   <Class Name="WinShooter.Bullet">
-    <Position X="3.25" Y="3.5" Width="1.5" />
+    <Position X="3.25" Y="3.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAA=</HashCode>
       <FileName>Bullet.vb</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="WinShooter.Player">
-    <Position X="0.5" Y="3.5" Width="1.5" />
+    <Position X="0.5" Y="3.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAgAAAAAAAAAACAgCAAAAAACBAAAABAAAAAA=</HashCode>
       <FileName>Player.vb</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="WinShooter.MotionModal">
-    <Position X="7.25" Y="0.5" Width="2" />
-    <TypeIdentifier>
-      <HashCode>AAAAQAAAAAEAAAQgAAAAAAAAAAAAACAAAAAAAAAAAAA=</HashCode>
-      <FileName>MotionModal.vb</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="WinShooter.BulletMotionModal">
-    <Position X="5.25" Y="3.75" Width="1.75" />
-    <TypeIdentifier>
-      <HashCode>AAAAQAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>BulletMotionModal.vb</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="WinShooter.NetworkMotionModal">
-    <Position X="9.25" Y="3.75" Width="1.75" />
-    <TypeIdentifier>
-      <HashCode>AAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAA=</HashCode>
-      <FileName>NetworkMotionModal.vb</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="WinShooter.ClientMotionModal">
-    <Position X="7.25" Y="3.75" Width="1.75" />
-    <TypeIdentifier>
-      <HashCode>AAAAQAAAAgAAAAAAAAAAAAgCAEAAAACAAAAAAAAAAAA=</HashCode>
-      <FileName>ClientMotionModal.vb</FileName>
-    </TypeIdentifier>
-    <ShowAsAssociation>
-      <Property Name="InputState" />
-    </ShowAsAssociation>
-  </Class>
   <Class Name="WinShooter.Motion">
-    <Position X="10.5" Y="0.5" Width="2.25" />
+    <Position X="4.25" Y="1" Width="2.25" />
     <TypeIdentifier>
       <HashCode>AAAQAACAAAAAAAAAAAAAAAAAQAAAAAgAAAAAAAAAAAA=</HashCode>
       <FileName>Motion.vb</FileName>
     </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="PositionStamp" />
+      <Property Name="VelocityStamp" />
+    </ShowAsAssociation>
   </Class>
   <Class Name="WinShooter.Renderer">
     <Position X="1.75" Y="8" Width="1.5" />
@@ -75,6 +45,9 @@
       <Property Name="HUD" />
       <Property Name="OwnPlayer" />
     </ShowAsAssociation>
+    <ShowAsCollectionAssociation>
+      <Property Name="Rays" />
+    </ShowAsCollectionAssociation>
   </Class>
   <Class Name="WinShooter.Ray">
     <Position X="0.5" Y="10.5" Width="1.5" />
@@ -101,51 +74,42 @@
     </TypeIdentifier>
   </Class>
   <Class Name="WinShooter.GameMap">
-    <Position X="4.5" Y="10.5" Width="1.5" />
+    <Position X="5.25" Y="8.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>GameMap.vb</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="WinShooter.GamePosition">
-    <Position X="13.25" Y="0.5" Width="1.5" />
+    <Position X="7.25" Y="1" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AACAAAAAAAAQAAAAAAAAAAAAAAABAAAAAAAAAAABAAI=</HashCode>
+      <HashCode>AACAAAAAACAQAAAAAAAAAAAAAAABAAAAAAAAAAABAAI=</HashCode>
       <FileName>GamePosition.vb</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="WinShooter.GameVelocity">
-    <Position X="13.25" Y="2.75" Width="1.5" />
+    <Position X="7.25" Y="3.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAI=</HashCode>
       <FileName>GameVelocity.vb</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="WinShooter.InputState">
-    <Position X="12" Y="5.5" Width="1.5" />
+    <Position X="7.25" Y="6.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAACAABAAAAAAAACAAAAAEAAAAAAACACAAAAAAAI=</HashCode>
       <FileName>InputState.vb</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="WinShooter.Game">
-    <Position X="8" Y="8.75" Width="1.5" />
+    <Position X="4.75" Y="6.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAADAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAQAA=</HashCode>
+      <HashCode>AAAAAAAAADAAAAAAAAAAAAAAAEAAAAAAAAEAAAAAQAA=</HashCode>
       <FileName>Game.vb</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
       <Property Name="Map" />
       <Property Name="Sight" />
-    </ShowAsAssociation>
-  </Class>
-  <Class Name="WinShooter.OwnPlayer">
-    <Position X="1.75" Y="5" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAACAAAAAAEAAAAABABAABAAAAAA=</HashCode>
-      <FileName>OwnPlayer.vb</FileName>
-    </TypeIdentifier>
-    <ShowAsAssociation>
       <Property Name="InputState" />
     </ShowAsAssociation>
   </Class>

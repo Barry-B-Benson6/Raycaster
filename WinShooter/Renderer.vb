@@ -15,11 +15,11 @@
         End Set
     End Property
 
-    Public Property OwnPlayer As OwnPlayer
+    Public Property OwnPlayer As WinShooter.Player
         Get
             Return Nothing
         End Get
-        Set(value As OwnPlayer)
+        Set(value As WinShooter.Player)
         End Set
     End Property
 
