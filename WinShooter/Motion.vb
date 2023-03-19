@@ -25,10 +25,22 @@ Public Class Motion
     Public Function CalculatePositionAtTime(currentTime As DateTime) As WinShooter.GamePosition
         Dim timeDiff As TimeSpan = currentTime.Subtract(TimeStamp)
         Dim dT_s = timeDiff.TotalSeconds
+        Dim gravity_ss = -9.81
 
-        Dim East = PositionStamp.East + (VelocityStamp.East * dT_s)
-        Dim North = PositionStamp.North + (VelocityStamp.North * dT_s)
-        Dim Up = PositionStamp.Up + (VelocityStamp.Up * dT_s)
+        ' calculate the distances travelled
+        Dim eastTraveled = VelocityStamp.East * dT_s
+        Dim northTraveled = VelocityStamp.North * dT_s
+        Dim upTraveled = VelocityStamp.Up * dT_s + 0.5 * gravity_ss * dT_s * dT_s  's = ut+ 0.5 *at^2 
+
+        ' calculate new position
+        Dim East = PositionStamp.East + eastTraveled
+        Dim North = PositionStamp.North + northTraveled
+        Dim Up = PositionStamp.Up + upTraveled
+
+        ' check if in ground
+        If Up <= 0 Then
+            Up = 0
+        End If
 
         Return New GamePosition(East, North, Up, PositionStamp.Heading_deg, PositionStamp.Tilt_deg)
     End Function
