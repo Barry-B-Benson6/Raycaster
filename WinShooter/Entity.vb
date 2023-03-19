@@ -9,6 +9,7 @@ Public MustInherit Class Entity
         Me.IsAlive = True
         Me.isDirty = True
         Me.LocallyOwned = locallyOwned
+        Position = motion.CalculatePositionAtTime(DateTime.UtcNow)
         HitBox = New RectangleF(New PointF(Position.East_m, Position.North_m), New SizeF(0.8, 0.8))
     End Sub
 

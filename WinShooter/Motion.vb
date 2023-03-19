@@ -21,6 +21,9 @@ Public Class Motion
     ''' </summary>
     Protected Sub New()
         MyBase.New()
+        PositionStamp = New GamePosition(0, 0, 0)
+        VelocityStamp = New GameVelocity(0, 0, 0)
+        TimeStamp = DateTime.UtcNow
     End Sub
 
     Public ReadOnly Property PositionStamp As WinShooter.GamePosition
