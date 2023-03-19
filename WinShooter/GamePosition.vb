@@ -1,4 +1,6 @@
-﻿Public Class GamePosition
+﻿Imports System.Numerics
+
+Public Class GamePosition
 
     Public Sub New(east As Decimal, north As Decimal, up As Decimal, heading_deg As Decimal, tilt_deg As Decimal)
         Me.North = north
@@ -24,5 +26,12 @@
     Public ReadOnly Property Heading_deg As Decimal
 
     Public ReadOnly Property Tilt_deg As Decimal
+
+    ''' <summary>
+    ''' Returns a vector3 representing the currentPosition
+    ''' </summary>
+    Public Function ToVector3() As Vector3
+        Return New Vector3(East, North, Up)
+    End Function
 
 End Class
