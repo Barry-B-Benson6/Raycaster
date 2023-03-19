@@ -11,4 +11,9 @@ Public Module Constants
     ''' The width, in metres, of a single cell of the map.
     ''' </summary>
     Public Const CellSize_m As Decimal = 2.0
+
+    ''' <summary>
+    ''' The Fire rate in shots per second
+    ''' </summary>
+    Public Const FireRate_s As Decimal = 4
 End Module
