@@ -87,11 +87,11 @@ Public Class Ray
         ''' <param name="Color">The value on the map at the point of collision</param>
         ''' <param name="pointOfCollision">the point of collision in gamespace</param>
         Public Sub New(pointOfCollision As PointF, Color As Byte)
-            CollisionPoint = New GamePosition(pointOfCollision.X, pointOfCollision.Y, 0)
+            CollisionPoint = RequireNotNull(pointOfCollision)
             Me.Color = Color
         End Sub
 
-        Public ReadOnly Property CollisionPoint As GamePosition
+        Public ReadOnly Property CollisionPoint As PointF
 
         ''' <summary>
         ''' This is the value on the map at the point of collision
