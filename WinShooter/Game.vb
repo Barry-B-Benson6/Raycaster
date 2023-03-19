@@ -7,7 +7,7 @@
         End Set
     End Property
 
-    Public Property Map As GameMap
+    Public Overridable Property Map As GameMap
         Get
             Return Nothing
         End Get

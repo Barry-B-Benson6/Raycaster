@@ -6,6 +6,13 @@ Public Class GameMap
         If Not IsSurroundedByWalls(map) Then Throw New ArgumentException("all maps must have walls corvering every edge")
         Me.map = map
     End Sub
+
+    ''' <summary>
+    ''' This exists to allow us to create mocks of this class, it should not be used any other time
+    ''' </summary>
+    Protected Sub New()
+        MyBase.New()
+    End Sub
     Private ReadOnly Property map As Byte(,)
 
     Private Function IsSurroundedByWalls(map As Byte(,)) As Boolean
@@ -30,7 +37,7 @@ Public Class GameMap
         Return True
     End Function
 
-    Public Function IsWallAt(position As GamePosition)
+    Public Overridable Function IsWallAt(position As GamePosition)
         Return (map(Math.Floor(position.East_m / Constants.CellSize_m), Math.Floor(position.North_m / Constants.CellSize_m)) <> 0)
     End Function
 End Class

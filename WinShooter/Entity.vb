@@ -77,7 +77,7 @@
             Return _LocallyOwned
         End Get
         Protected Set(value As Boolean)
-            _LocallyOwned = LocallyOwned
+            _LocallyOwned = value
         End Set
     End Property
 
