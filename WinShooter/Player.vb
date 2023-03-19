@@ -4,7 +4,7 @@
     Public Property IsCrouching As Integer
         Get
             SyncLock Me
-                Return Nothing
+                Return Game.InputState.Crouching
             End SyncLock
         End Get
         Set(value As Integer)
@@ -17,7 +17,7 @@
     Public Property IsAiming As Integer
         Get
             SyncLock Me
-                Return Nothing
+                Return Game.InputState.Aiming
             End SyncLock
         End Get
         Set(value As Integer)
