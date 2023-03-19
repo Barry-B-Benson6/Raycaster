@@ -1,9 +1,8 @@
-﻿Public Class Player
-    Inherits Entity
+﻿Imports System.Net
+Imports System.Security.Policy
 
-    Public Sub New(name As String, motion As Motion, game As Game, locallyOwned As Boolean)
-        MyBase.New(name, motion, game, locallyOwned)
-    End Sub
+Public Class Player
+    Inherits Entity
 
     ''' <summary>
     ''' This exists to allow us to create mocks of this class, it should not be used any other time
@@ -12,49 +11,111 @@
         MyBase.New()
     End Sub
 
-    Public Property IsCrouching As Integer
+    Private LastBulletFire As DateTime
+
+    Public Sub New(name As String, initialMovement As Motion, game As Game, locallyOwned As Boolean)
+        MyBase.New(name, initialMovement, game, locallyOwned)
+        LastBulletFire = DateTime.UtcNow().AddSeconds(-(1 / Constants.FireRate_s))
+    End Sub
+
+    Private _isCrouching As Boolean
+    Public Property IsCrouching As Boolean
         Get
             SyncLock Me
-                Return Game.InputState.Crouching
+                Return _IsCrouching
             End SyncLock
         End Get
-        Set(value As Integer)
+        Private Set(value As Boolean)
             SyncLock Me
-
+                _IsCrouching = value
             End SyncLock
         End Set
     End Property
 
-    Public Property IsAiming As Integer
+    Private _IsAiming As Boolean
+    Public Property IsAiming As Boolean
         Get
             SyncLock Me
-                Return Game.InputState.Aiming
+                Return _IsAiming
             End SyncLock
         End Get
-        Set(value As Integer)
+        Set(value As Boolean)
             SyncLock Me
-
+                _IsAiming = value
             End SyncLock
         End Set
     End Property
 
+    Private Function CreateBullet(time As DateTime) As WinShooter.Bullet
+        Dim vE_ms = Math.Cos(ToRadians(Position.Heading_deg)) * BulletSpeed_ms
+        Dim vN_ms = Math.Sin(ToRadians(Position.Heading_deg)) * BulletSpeed_ms
+        Dim vU_ms = 0
 
-
-    Private Function CreateBullet() As WinShooter.Bullet
-        Throw New NotImplementedException()
+        Dim velocity = New GameVelocity(vE_ms, vN_ms, vU_ms)
+        Return New Bullet(Me, New Motion(Position, velocity, time), Game, True)
     End Function
 
     '''  <remarks>Fire Bullets and update aiming status is crouching</remarks>
     Public Overrides Sub UpdateState(time As DateTime)
 
+        If (LocallyOwned) Then PerformLocallyOwnedUpdateState(time)
+    End Sub
+
+    Public Overrides Sub UpdatePosition(time As DateTime)
+        Dim nextPosition = Motion.CalculatePositionAtTime(time)
+
+        Try
+            If (Game.Map.IsWallAt(nextPosition)) Then
+                Dim x = Math.Floor(nextPosition.East_m / CellSize_m)
+                Dim y = Math.Floor(nextPosition.North_m / CellSize_m)
+                Dim xOLd = Math.Floor(Position.East_m / CellSize_m)
+                Dim yOLd = Math.Floor(Position.North_m / CellSize_m)
+
+                If (x <> xOLd And y <> yOLd) Then
+                    Exit Sub
+                ElseIf (x <> xOLd) Then
+                    Position = New GamePosition(Position.East_m, nextPosition.North_m, nextPosition.Up_m, nextPosition.Heading_deg, nextPosition.Tilt_deg)
+                Else
+                    Position = New GamePosition(nextPosition.East_m, Position.North_m, nextPosition.Up_m, nextPosition.Heading_deg, nextPosition.Tilt_deg)
+                End If
+            Else
+                Position = nextPosition
+            End If
+        Catch
+        End Try
+    End Sub
+
+    Private Sub PerformLocallyOwnedUpdateState(time As DateTime)
+        IsAiming = Game.InputState.Aiming
+
+        If Not IsCrouching And Game.InputState.Crouching Then Crouch()
+        If IsCrouching And Not Game.InputState.Crouching Then UnCrouch()
+
+        IsCrouching = Game.InputState.Crouching
+
+        If Game.InputState.Jumping Then Jump()
+
+        If (Game.InputState.Firing) Then
+            Dim timeBetweenNowAndLast = time.Subtract(LastBulletFire)
+            If (timeBetweenNowAndLast.TotalSeconds > (1 / FireRate_s)) Then
+                Dim newBullet = CreateBullet(time)
+                Game.AddEntity(newBullet)
+            End If
+        End If
+
+    End Sub
+    Private Sub Jump()
+        If Motion.VelocityStamp.Up_ms = 0 Then
+            ''5.111 is the initial velocity that causes a jump height of 1.333
+            Dim JumpVel_ms = 5.111
+            Motion = New Motion(Position, New GameVelocity(Motion.VelocityStamp.East_ms, Motion.VelocityStamp.North_ms, JumpVel_ms), DateTime.Now())
+        End If
     End Sub
 
     Private Sub Crouch()
-    End Sub
-
-    Private Sub Jump()
 
     End Sub
+
 
     Private Sub UnCrouch()
 

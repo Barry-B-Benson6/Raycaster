@@ -11,7 +11,7 @@ Namespace UnitTestsWinShooter
 
         <Test>
         Public Sub TestCheckCollision()
-            Throw New Exception("Need to create player class before test can be done")
+            Throw New Exception("Game Class Must be complete to write this")
         End Sub
 
     End Class
