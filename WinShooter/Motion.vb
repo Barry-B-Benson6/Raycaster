@@ -28,20 +28,20 @@ Public Class Motion
         Dim gravity_ss = -9.81
 
         ' calculate the distances travelled
-        Dim eastTraveled = VelocityStamp.East * dT_s
-        Dim northTraveled = VelocityStamp.North * dT_s
-        Dim upTraveled = VelocityStamp.Up * dT_s + 0.5 * gravity_ss * dT_s * dT_s  's = ut+ 0.5 *at^2 
+        Dim eastTravelled_m = VelocityStamp.East_ms * dT_s
+        Dim northTravelled_m = VelocityStamp.North_ms * dT_s
+        Dim upTravelled_m = VelocityStamp.Up_ms * dT_s + 0.5 * gravity_ss * dT_s * dT_s  's = ut+ 0.5 *at^2 
 
         ' calculate new position
-        Dim East = PositionStamp.East + eastTraveled
-        Dim North = PositionStamp.North + northTraveled
-        Dim Up = PositionStamp.Up + upTraveled
+        Dim east_m = PositionStamp.East_m + eastTravelled_m
+        Dim north_m = PositionStamp.North_m + northTravelled_m
+        Dim up_m = PositionStamp.Up_m + upTravelled_m
 
         ' check if in ground
-        If Up <= 0 Then
-            Up = 0
+        If up_m <= 0 Then
+            up_m = 0
         End If
 
-        Return New GamePosition(East, North, Up, PositionStamp.Heading_deg, PositionStamp.Tilt_deg)
+        Return New GamePosition(east_m, north_m, up_m, PositionStamp.Heading_deg, PositionStamp.Tilt_deg)
     End Function
 End Class

@@ -34,6 +34,7 @@
     End Property
 
     Private Function CreateBullet() As WinShooter.Bullet
+        Throw New NotImplementedException()
     End Function
 
     '''  <remarks>Fire Bullets and update aiming status is crouching</remarks>
