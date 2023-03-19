@@ -14,7 +14,9 @@
 
     Public Property Aiming As Boolean
 
-    Public Property Crouching As Integer
+    Public Property Crouching As Boolean
+
+    Public Property Jumping As Boolean
 
     ''' <summary>
     '''     Updates the input state based off the new keyboard input.
@@ -34,6 +36,8 @@
                 Backward = isKeyDown
             Case Keys.LControlKey
                 Crouching = isKeyDown
+            Case Keys.Space
+                Jumping = isKeyDown
         End Select
     End Sub
 
