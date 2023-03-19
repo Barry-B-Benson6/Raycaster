@@ -14,7 +14,7 @@ Public Class Ray
     ''' <returns>Details for Collision or nothing if no collision</returns>
     Public Function CheckCollision(Map As Byte(,), player As Player) As Collision
         Dim collision
-        Dim Point As Vector3 = player.Position.ToVector3()
+        Dim Point As PointF = player.Position.ToCellSpacePointF()
         Dim oldPoint = Point
         Dim Cos = Math.Cos(ToRadians(player.Position.Heading_deg + HeadingDiffFromCenterPov_deg))
         Dim Sin = Math.Sin(ToRadians(player.Position.Heading_deg + HeadingDiffFromCenterPov_deg))

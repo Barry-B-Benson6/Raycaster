@@ -30,8 +30,8 @@ Public Class GamePosition
     ''' <summary>
     ''' Returns a vector3 representing the currentPosition
     ''' </summary>
-    Public Function ToVector3() As Vector3
-        Return New Vector3(East, North, Up)
+    Public Function ToCellSpacePointF() As PointF
+        Return New PointF(East * Constants.CellSize_m, North * Constants.CellSize_m)
     End Function
 
 End Class

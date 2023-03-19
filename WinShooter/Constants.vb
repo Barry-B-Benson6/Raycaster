@@ -1,7 +1,7 @@
 ﻿''' <summary>
 ''' Contains game-wide constant values.
 ''' </summary>
-Module Constants
+Public Module Constants
     ''' <summary>
     ''' The acceleration due to gravity, in metres per second squared.
     ''' </summary>
