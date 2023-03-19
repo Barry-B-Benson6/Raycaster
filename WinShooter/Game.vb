@@ -34,4 +34,8 @@
     Public Sub Start()
 
     End Sub
+
+    Public Sub AddEntity(entity As Entity)
+
+    End Sub
 End Class

@@ -34,7 +34,7 @@
                 Return _Position
             End SyncLock
         End Get
-        Private Set(value As GamePosition)
+        Protected Set(value As GamePosition)
             SyncLock Me
                 _Position = value
             End SyncLock
@@ -112,7 +112,7 @@
     ''' <remarks></remarks>
     Public MustOverride Sub UpdateState(time As DateTime)
 
-    Public Sub UpdatePosition(time As DateTime)
+    Public Overridable Sub UpdatePosition(time As DateTime)
         Position = Motion.CalculatePositionAtTime(time)
     End Sub
 End Class
