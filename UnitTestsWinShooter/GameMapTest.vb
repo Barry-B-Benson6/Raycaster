@@ -17,9 +17,9 @@ Namespace UnitTestsWinShooter
             }
             Dim map = New GameMap(mapValue)
             Assert.AreEqual(True, map.IsWallAt(New GamePosition(0, 0, 0)))
-            Assert.AreEqual(True, map.IsWallAt(New GamePosition(0, 0, 1)))
-            Assert.AreEqual(False, map.IsWallAt(New GamePosition(1, 1, 0)))
-            Assert.AreEqual(False, map.IsWallAt(New GamePosition(1, 1, 1)))
+            Assert.AreEqual(True, map.IsWallAt(New GamePosition(0, 0, CellSize_m)))
+            Assert.AreEqual(False, map.IsWallAt(New GamePosition(CellSize_m, CellSize_m, 0)))
+            Assert.AreEqual(False, map.IsWallAt(New GamePosition(CellSize_m, CellSize_m, CellSize_m)))
         End Sub
 
         <Test>

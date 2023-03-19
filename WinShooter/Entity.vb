@@ -103,9 +103,9 @@
     End Property
 
     ''' <remarks></remarks>
-    Public MustOverride Sub UpdateState()
+    Public MustOverride Sub UpdateState(time As DateTime)
 
-    Public Sub UpdatePosition()
-        Position = Motion.CalculatePositionAtTime(DateTime.Now)
+    Public Sub UpdatePosition(time As DateTime)
+        Position = Motion.CalculatePositionAtTime(time)
     End Sub
 End Class

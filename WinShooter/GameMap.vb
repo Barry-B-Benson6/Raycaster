@@ -31,6 +31,6 @@ Public Class GameMap
     End Function
 
     Public Function IsWallAt(position As GamePosition)
-        Return (map(Math.Floor(position.East_m), Math.Floor(position.North_m)) <> 0)
+        Return (map(Math.Floor(position.East_m / Constants.CellSize_m), Math.Floor(position.North_m / Constants.CellSize_m)) <> 0)
     End Function
 End Class
