@@ -55,6 +55,10 @@ Public Class Player
         Return New Bullet(Me, New Motion(Position, velocity, time), Game, True)
     End Function
 
+    Public Overrides Sub Draw(Distance As Decimal, xCoordOfMiddle As Integer, formSize As Size, PlayerZ As Decimal, e As PaintEventArgs)
+        Throw New NotImplementedException()
+    End Sub
+
     '''  <remarks>Fire Bullets and update aiming status is crouching</remarks>
     Public Overrides Sub UpdateState(time As DateTime)
 

@@ -18,4 +18,11 @@
             IsAlive = False
         End If
     End Sub
+
+    Public Overrides Sub Draw(Distance As Decimal, xCoordOfMiddle As Integer, formSize As Size, PlayerZ As Decimal, e As PaintEventArgs)
+        Dim size = New Size((formSize.Height / 5 / Distance), (formSize.Height / 5 / Distance))
+        Dim Middle = formSize.Height / 2
+        Dim yOffset = PlayerZ * (formSize.Height / Distance)
+        e.Graphics.FillEllipse(New SolidBrush(Color.Gold), New Rectangle(New Point(xCoordOfMiddle - (size.Width / 2), Middle - (size.Height / 2) + yOffset), size))
+    End Sub
 End Class

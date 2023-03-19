@@ -5,7 +5,7 @@
     End Sub
     Private Property ClientPlayer As WinShooter.Player
 
-    Public Sub Render(e As PaintEventArgs, screenSize As SizeF)
+    Public Sub Render(e As PaintEventArgs, screenSize As Size)
         If (ClientPlayer.IsAiming) Then
             Dim gun = My.Resources.Resources.ADS_gun
             e.Graphics.DrawImage(gun, New Point((screenSize.Width / 2) - (gun.Width / 2), screenSize.Height - gun.Height))

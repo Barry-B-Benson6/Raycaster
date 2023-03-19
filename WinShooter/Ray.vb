@@ -6,7 +6,7 @@ Public Class Ray
     Public Sub New(HeadingDiff_deg As Decimal)
         HeadingDiffFromCenterPov_deg = HeadingDiff_deg
     End Sub
-    Private ReadOnly Property HeadingDiffFromCenterPov_deg As Decimal
+    Public ReadOnly Property HeadingDiffFromCenterPov_deg As Decimal
 
     ''' <summary>
     ''' 

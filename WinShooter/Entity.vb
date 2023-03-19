@@ -1,4 +1,6 @@
-﻿Public MustInherit Class Entity
+﻿Imports System.Numerics
+
+Public MustInherit Class Entity
     Public Sub New(name As String, motion As Motion, game As Game, locallyOwned As Boolean)
         Me.Name = RequireNotNull(name)
         Me.Motion = RequireNotNull(motion)
@@ -7,6 +9,7 @@
         Me.IsAlive = True
         Me.isDirty = True
         Me.LocallyOwned = locallyOwned
+        HitBox = New RectangleF(New PointF(Position.East_m, Position.North_m), New SizeF(0.8, 0.8))
     End Sub
 
     ''' <summary>
@@ -15,6 +18,16 @@
     Protected Sub New()
         MyBase.New()
     End Sub
+
+    Private _HitBox As RectangleF
+    Public Property HitBox As RectangleF
+        Get
+            Return _HitBox
+        End Get
+        Set(value As RectangleF)
+            _HitBox = value
+        End Set
+    End Property
 
     Private _IsAlive As Boolean
 
@@ -109,7 +122,13 @@
         End Set
     End Property
 
-    ''' <remarks></remarks>
+    Public ReadOnly Property Middle As PointF
+        Get
+            Return New PointF(HitBox.Right / 2, HitBox.Bottom / 2)
+        End Get
+    End Property
+
+    Public MustOverride Sub Draw(Distance As Decimal, xCoordOfMiddle As Integer, formSize As Size, PlayerZ As Decimal, e As PaintEventArgs)
     Public MustOverride Sub UpdateState(time As DateTime)
 
     Public Overridable Sub UpdatePosition(time As DateTime)

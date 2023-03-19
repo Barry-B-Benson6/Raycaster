@@ -3,7 +3,7 @@
   <Class Name="WinShooter.Entity">
     <Position X="1.5" Y="0.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AQAAAAAAAAIAACAgAAAACAQAAAhAAAAAAAAABAAAAAA=</HashCode>
+      <HashCode>AQAAAAACAAIAACAgAABArAQAAAhAAAEIAAAABAIAAAA=</HashCode>
       <FileName>Entity.vb</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
@@ -13,21 +13,21 @@
   <Class Name="WinShooter.Bullet">
     <Position X="3.25" Y="3.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAABAAAAAA=</HashCode>
       <FileName>Bullet.vb</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="WinShooter.Player">
     <Position X="0.5" Y="3.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAgAAAAAAAAAACAgCAAAAAACBAAAABAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAghAAACAAAAAAAAgCAAABAACBEAAABAAAAAA=</HashCode>
       <FileName>Player.vb</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="WinShooter.Motion">
     <Position X="4.25" Y="1" Width="2.25" />
     <TypeIdentifier>
-      <HashCode>AAAQAACAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAQA=</HashCode>
+      <HashCode>AAAQAACAAAAAAAAAAAAAAAAAAAAAAAgAAACAAAAAAQA=</HashCode>
       <FileName>Motion.vb</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
@@ -62,7 +62,7 @@
       </Class>
     </NestedTypes>
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAQA=</HashCode>
       <FileName>Ray.vb</FileName>
     </TypeIdentifier>
   </Class>
@@ -83,28 +83,28 @@
   <Class Name="WinShooter.GamePosition">
     <Position X="7.25" Y="1" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AACAAAAAAAAQAAAAAAAAAAAAAAABAAAAAAAAAAABAAI=</HashCode>
+      <HashCode>AAAAAAAAAAgQCAAAAAAAAAAAAABBAAAAAAAAABAAAAA=</HashCode>
       <FileName>GamePosition.vb</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="WinShooter.GameVelocity">
     <Position X="7.25" Y="3.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAI=</HashCode>
+      <HashCode>AEAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAg=</HashCode>
       <FileName>GameVelocity.vb</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="WinShooter.InputState">
     <Position X="7.25" Y="6.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAACAABAAAAAAAACAAAAAEAAAAAAACACAAAAAAAI=</HashCode>
+      <HashCode>AAQAAACAABAAAAAAAACAAAAAEAAAAAAACACAAAAAIAI=</HashCode>
       <FileName>InputState.vb</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="WinShooter.Game">
     <Position X="4.75" Y="6.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAADAAAAAAAAAAAAAAAEAAAAAAAAEAAAAAQAA=</HashCode>
+      <HashCode>AAAAAAAAADAAAAAAAAAAAAAAAEAAAAAAAIEAAAAAQAA=</HashCode>
       <FileName>Game.vb</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>

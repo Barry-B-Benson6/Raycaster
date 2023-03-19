@@ -13,7 +13,7 @@ Public Class GameMap
     Protected Sub New()
         MyBase.New()
     End Sub
-    Private ReadOnly Property map As Byte(,)
+    Public ReadOnly Property map As Byte(,)
 
     Private Function IsSurroundedByWalls(map As Byte(,)) As Boolean
         Dim RightIndex = map.GetLength(0) - 1

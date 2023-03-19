@@ -1,9 +1,12 @@
 ﻿Public Class Game
+
+    Dim _Entities As List(Of Entity)
     Public Property Entities As System.Collections.Generic.List(Of WinShooter.Entity)
         Get
-            Return Nothing
+            Return _Entities
         End Get
-        Set(value As System.Collections.Generic.List(Of WinShooter.Entity))
+        Private Set(value As System.Collections.Generic.List(Of WinShooter.Entity))
+            _Entities = value
         End Set
     End Property
 
