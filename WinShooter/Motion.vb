@@ -16,6 +16,13 @@ Public Class Motion
         TimeStamp = RequireNotNull(Time)
     End Sub
 
+    ''' <summary>
+    ''' This exists to allow us to create mocks of this class, it should not be used any other time
+    ''' </summary>
+    Protected Sub New()
+        MyBase.New()
+    End Sub
+
     Public ReadOnly Property PositionStamp As WinShooter.GamePosition
 
     Public ReadOnly Property TimeStamp As DateTime
@@ -43,5 +50,14 @@ Public Class Motion
         End If
 
         Return New GamePosition(east_m, north_m, up_m, PositionStamp.Heading_deg, PositionStamp.Tilt_deg)
+    End Function
+    ''' <summary>
+    ''' Creates a new motion at given position without any movement
+    ''' </summary>
+    ''' <param name="position">Position of entity</param>
+    ''' <param name="time">Time of validity</param>
+    ''' <returns>A new motion</returns>
+    Public Shared Function NotMovingAt(position As GamePosition, time As DateTime) As Motion
+        Return New Motion(position, New GameVelocity(0, 0, 0), time)
     End Function
 End Class

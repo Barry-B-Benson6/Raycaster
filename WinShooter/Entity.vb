@@ -9,6 +9,13 @@
         Me.LocallyOwned = locallyOwned
     End Sub
 
+    ''' <summary>
+    ''' This exists to allow us to create mocks of this class, it should not be used any other time
+    ''' </summary>
+    Protected Sub New()
+        MyBase.New()
+    End Sub
+
     Private _IsAlive As Boolean
 
     Public Property IsAlive As Boolean
@@ -55,7 +62,7 @@
     End Property
 
     Private _Name As String
-    Public Property Name As String
+    Public Overridable Property Name As String
         Get
             Return _Name
         End Get
