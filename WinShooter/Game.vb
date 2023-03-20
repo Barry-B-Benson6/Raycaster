@@ -32,10 +32,14 @@ Public Class Game
     Dim _Entities As New Dictionary(Of Guid, Entity)
     Public Property Entities As Dictionary(Of Guid, Entity)
         Get
-            Return _Entities
+            SyncLock Me
+                Return _Entities
+            End SyncLock
         End Get
         Private Set(value As Dictionary(Of Guid, Entity))
-            _Entities = value
+            SyncLock Me
+                _Entities = value
+            End SyncLock
         End Set
     End Property
 
@@ -64,7 +68,7 @@ Public Class Game
     Private Sub funcRenderCycle()
         While True
             Form.Invoke(Sub() Form.Refresh())
-            Thread.Sleep(1)
+            Thread.Sleep(10)
         End While
     End Sub
 
@@ -85,9 +89,9 @@ Public Class Game
     End Sub
 
     Private Sub KeyboardButtonDown(sender As Object, e As KeyEventArgs)
-        InputState.Update(Keys.E.KeyCode, True)
+        InputState.Update(e.KeyCode, True)
     End Sub
     Private Sub KeyboardButtonUp(sender As Object, e As KeyEventArgs)
-        InputState.Update(Keys.E.KeyCode, False)
+        InputState.Update(e.KeyCode, False)
     End Sub
 End Class
