@@ -1,10 +1,10 @@
 ﻿Module MathHelper
     Public Function ToRadians(angle_deg As Decimal)
-        Return angle_deg * (180 / Math.PI)
+        Return angle_deg * (Math.PI / 180)
     End Function
 
     Public Function ToDegrees(angle_rad As Decimal)
-        Return angle_rad * (Math.PI / 180)
+        Return angle_rad * (180 / Math.PI)
     End Function
 
     Public Function DistanceBetweenTwoPoints(point1 As PointF, point2 As PointF)
