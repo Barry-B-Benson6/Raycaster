@@ -113,20 +113,20 @@ Public Class Player
         End If
 
         If (Game.InputState.Left) Then
-            nE_m -= Math.Cos(Position.Heading_deg + 90)
-            nN_m -= Math.Sin(Position.Heading_deg + 90)
+            nE_m -= Math.Cos(Position.Heading_deg + 90) * 20
+            nN_m -= Math.Sin(Position.Heading_deg + 90) * 20
         End If
         If (Game.InputState.Right) Then
-            nE_m -= Math.Cos(Position.Heading_deg - 90)
-            nN_m -= Math.Sin(Position.Heading_deg - 90)
+            nE_m -= Math.Cos(Position.Heading_deg - 90) * 20
+            nN_m -= Math.Sin(Position.Heading_deg - 90) * 20
         End If
         If (Game.InputState.Forward) Then
-            nE_m -= Math.Cos(Position.Heading_deg)
-            nN_m -= Math.Sin(Position.Heading_deg)
+            nE_m += Math.Cos(Position.Heading_deg) * 20
+            nN_m += Math.Sin(Position.Heading_deg) * 20
         End If
         If (Game.InputState.Backward) Then
-            nE_m += Math.Cos(Position.Heading_deg)
-            nN_m += Math.Sin(Position.Heading_deg)
+            nE_m -= Math.Cos(Position.Heading_deg) * 20
+            nN_m -= Math.Sin(Position.Heading_deg) * 20
         End If
         Motion = New Motion(Position, New GameVelocity(nE_m, nN_m, nU_m), DateTime.UtcNow)
     End Sub
