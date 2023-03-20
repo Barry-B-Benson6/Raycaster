@@ -4,7 +4,7 @@ Public MustInherit Class Entity
     Public Sub New(name As String, motion As Motion, game As Game, locallyOwned As Boolean)
         Me.Name = RequireNotNull(name)
         Me.Motion = RequireNotNull(motion)
-        Me.EntityId = New Guid()
+        Me.EntityId = Guid.NewGuid()
         Me.Game = RequireNotNull(game)
         Me.IsAlive = True
         Me.isDirty = True
