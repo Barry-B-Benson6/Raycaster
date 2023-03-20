@@ -17,59 +17,67 @@ Public Class Renderer
     Private Property OwnPlayer As WinShooter.Player
 
     Public Sub Render(e As PaintEventArgs, formSize As Size)
-        e.Graphics.DrawString(OwnPlayer.Position.Heading_deg.ToString(), Form.DefaultFont, New SolidBrush(Color.Black), New PointF(0, 0))
 
         Dim middle = formSize.Height / 2
+
+        e.Graphics.FillRectangle(New SolidBrush(Color.LightBlue), New Rectangle(New Point(0, 0), New Size(Game.formSize.Width, Game.formSize.Height / 2)))
+        e.Graphics.FillRectangle(New SolidBrush(Color.Green), New Rectangle(New Point(0, middle), New Size(Game.formSize.Width, Game.formSize.Height / 2)))
+
         ''Draw Walls
-        For i = 0 To Rays.Count - 1
-            Dim collision As Ray.Collision = Rays(i).CheckCollision(Game.Map.map, OwnPlayer)
-            If (Not collision Is Nothing) Then
-                Dim value = collision.Color
-                Dim point = collision.CollisionPoint
-
-                Dim CellSpacePlayerPos = OwnPlayer.Position.ToCellSpacePointF()
-                Dim distance = DistanceBetweenTwoPoints(CellSpacePlayerPos, point)
-                Dim sectionWidth = formSize.Width / Rays.Count
-                Dim rectLeft = i * sectionWidth
-
-                Dim Diff = Rays(i).HeadingDiffFromCenterPov_deg
-                distance = Math.Abs(distance * Math.Cos(ToRadians(Diff)))
-
-                Dim height = (formSize.Height / distance)
-                If (distance < 1) Then height = formSize.Height
-
-
-                Dim percent = (height / (formSize.Height)) * 1.6
-                If (percent > 1 Or percent <= 0) Then percent = 1
-
-                Dim colour As Color
-                Select Case value
-                    Case CByte(1)
-                        colour = Color.FromArgb(255 * percent, 255 * percent, 0 * percent)
-                    Case CByte(2)
-                        colour = Color.FromArgb(255 * percent, 0 * percent, 0 * percent)
-                    Case CByte(3)
-                        colour = Color.FromArgb(0, 0, 255 * percent)
-                End Select
-
-                colour = Color.Yellow
-
-                Dim yOffset = OwnPlayer.Position.Up_m / CellSize_m * height
-                e.Graphics.FillRectangle(New SolidBrush(colour), New Rectangle(New Point(rectLeft, middle - (height / 2)), New Size(sectionWidth + 1, height)))
-
-            End If
-
-        Next
+        DrawWalls(e, formSize)
 
         ''See Entities
-        For i = 0 To Game.Entities.Count - 1
+        DrawEntities(e, formSize)
+
+        ''Draw Map
+        ''DrawMap(e, formSize)
+
+        HUD.Render(e, formSize)
+        e.Graphics.ResetTransform()
+        e.Graphics.DrawString(OwnPlayer.Position.Heading_deg, Form.DefaultFont, New SolidBrush(Color.Black), New PointF(0, 0))
+    End Sub
+
+    Private Sub DrawMap(e As PaintEventArgs, formSize As Size)
+        Dim sizCellSize = New Size(50, 50)
+        Dim Map = Game.Map.map
+        e.Graphics.ResetTransform()
+
+        Dim CellPlayerLocation = OwnPlayer.Position.ToCellSpacePointF
+
+        For x = 0 To Map.GetLength(0) - 1
+            For y = 0 To Map.GetLength(1) - 1
+                If (Map(x, y) = 0) Then Continue For
+                Dim pos = New Point(x * sizCellSize.Width + 5, y * sizCellSize.Height + 5)
+                e.Graphics.FillRectangle(New SolidBrush(Color.Black), New Rectangle(pos, sizCellSize))
+            Next
+        Next
+        Dim player2dPoint = New Point(CellPlayerLocation.X * sizCellSize.Width, CellPlayerLocation.Y * sizCellSize.Height)
+        e.Graphics.FillEllipse(New SolidBrush(Color.Blue), New Rectangle(New Point(player2dPoint.X - 10, player2dPoint.Y - 10), New Size(20, 20)))
+        e.Graphics.DrawLine(New Pen(Color.Black, 5), player2dPoint, New Point(player2dPoint.X + (Math.Cos(ToRadians(OwnPlayer.Position.Heading_deg)) * 10), player2dPoint.Y + (Math.Sin(ToRadians(OwnPlayer.Position.Heading_deg)) * 10)))
+
+
+
+
+        For i = 0 To Rays.Count - 1
+            Dim ray = Rays(i)
+            Dim collision As Ray.Collision = ray.CheckCollision(Map, OwnPlayer)
+            If (collision IsNot Nothing) Then
+                Dim collisionPoint As PointF = collision.CollisionPoint
+                e.Graphics.DrawLine(New Pen(Color.Red), player2dPoint, New Point(collisionPoint.X * sizCellSize.Width, collisionPoint.Y * sizCellSize.Height))
+            End If
+        Next
+    End Sub
+
+    Private Sub DrawEntities(e As PaintEventArgs, formSize As Size)
+        Dim Entities = New Dictionary(Of Guid, Entity)(Game.Entities)
+        For i = 0 To Entities.Count - 1
             ''Dont Draw Self
-            If (Game.Entities(i).Middle = OwnPlayer.Middle) Then Continue For
+            If (Entities.Values(i).Middle = OwnPlayer.Middle) Then Continue For
             Dim sightDistance = Nothing
             Dim raysOfSight = New List(Of UInt16)
             For j = 0 To Rays.Count - 1
                 ''SightPoint in gamespace
-                Dim Sight As PointF = SeeEntity(Game.Entities(i), Rays(j).HeadingDiffFromCenterPov_deg)
+                Dim Sight As PointF = SeeEntity(Entities.Values(i), Rays(j).HeadingDiffFromCenterPov_deg)
                 If (Sight = Nothing) Then Continue For
 
                 sightDistance = DistanceBetweenTwoPoints(New PointF(OwnPlayer.Position.East_m, OwnPlayer.Position.North_m), Sight)
@@ -99,10 +107,48 @@ Public Class Renderer
             Dim rectleft = rayIndex * sectionwidth
             If (sightDistance = 0) Then Continue For
 
-            Game.Entities(i).Draw(sightDistance, rectleft, formSize, OwnPlayer.Position.Up_m, e)
+            Entities.Values(i).Draw(sightDistance, rectleft, formSize, OwnPlayer.Position.Up_m, e)
         Next
+    End Sub
 
-        HUD.Render(e, formSize)
+    Private Sub DrawWalls(e As PaintEventArgs, formSize As Size)
+        Dim middle = formSize.Height / 2
+        For i = 0 To Rays.Count - 1
+            Dim collision As Ray.Collision = Rays(i).CheckCollision(Game.Map.map, OwnPlayer)
+            If (Not collision Is Nothing) Then
+                Dim value = collision.Color
+                Dim point = collision.CollisionPoint
+
+                Dim distance = DistanceBetweenTwoPoints(OwnPlayer.Position.ToCellSpacePointF(), point)
+                Dim sectionWidth = formSize.Width / Rays.Count
+                Dim rectLeft = i * sectionWidth
+
+                Dim Diff = Rays(i).HeadingDiffFromCenterPov_deg
+                distance = Math.Abs(distance * Math.Cos(ToRadians(Diff)))
+
+                Dim height = (formSize.Height / distance)
+                'If (distance < 1) Then height = Me.Height
+
+
+                Dim percent = (height / (formSize.Height)) * 1.6
+                If (percent > 1 Or percent <= 0) Then percent = 1
+
+                Dim colour As Color
+                Select Case value
+                    Case CByte(1)
+                        colour = Color.FromArgb(255 * percent, 255 * percent, 0 * percent)
+                    Case CByte(2)
+                        colour = Color.FromArgb(255 * percent, 0 * percent, 0 * percent)
+                    Case CByte(3)
+                        colour = Color.FromArgb(0, 0, 255 * percent)
+                End Select
+
+                Dim yOffset = OwnPlayer.Position.Up_m / Constants.CellSize_m * height
+                e.Graphics.FillRectangle(New SolidBrush(colour), New Rectangle(New Point(rectLeft, middle - (height / 2) + yOffset), New Size(sectionWidth + 1, height)))
+
+            End If
+
+        Next
     End Sub
 
     Private Function SeeEntity(Entity As Entity, RayAngleDiff_deg As Decimal)
