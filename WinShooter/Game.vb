@@ -8,7 +8,8 @@ Public Class Game
         AddHandler form.KeyUp, AddressOf KeyboardButtonUp
         AddHandler form.MouseDown, AddressOf MouseButtonDown
         AddHandler form.MouseUp, AddressOf MouseButtonUp
-
+        AddHandler form.GotFocus, AddressOf GainedFocus
+        AddHandler form.LostFocus, AddressOf LostFocus
 
 
         Me.Form = form
@@ -93,5 +94,31 @@ Public Class Game
     End Sub
     Private Sub KeyboardButtonUp(sender As Object, e As KeyEventArgs)
         InputState.Update(e.KeyCode, False)
+    End Sub
+
+    Public ReadOnly Property formSize As Size
+        Get
+            Return Form.Size
+        End Get
+    End Property
+
+    Private _Focused As Boolean
+    Public Property Focused As Boolean
+        Get
+            Return _Focused
+        End Get
+        Private Set(value As Boolean)
+            _Focused = value
+        End Set
+    End Property
+    Private Sub GainedFocus(sender As Object, e As EventArgs)
+        Cursor.Hide()
+        Focused = True
+    End Sub
+
+    Private Sub LostFocus(sender As Object, e As EventArgs)
+        Cursor.Show()
+        Cursor.Position = New Point(Form.Size.Width / 2, Form.Size.Width / 2)
+        Focused = False
     End Sub
 End Class

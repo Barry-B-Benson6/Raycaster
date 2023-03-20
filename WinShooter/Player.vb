@@ -22,12 +22,12 @@ Public Class Player
     Public Property IsCrouching As Boolean
         Get
             SyncLock Me
-                Return _IsCrouching
+                Return _isCrouching
             End SyncLock
         End Get
         Private Set(value As Boolean)
             SyncLock Me
-                _IsCrouching = value
+                _isCrouching = value
             End SyncLock
         End Set
     End Property
@@ -107,28 +107,37 @@ Public Class Player
         End If
 
         Dim nE_m, nN_m, nU_m, nH_deg, nT_deg As Decimal
-        If Game.InputState.MouseDiff <> New PointF(0, 0) Then
-            nH_deg += Game.InputState.MouseDiff.X
-            nT_deg += Game.InputState.MouseDiff.Y
+        Dim MouseDiff = Game.InputState.MouseDiff
+
+        If MouseDiff <> New PointF(0, 0) Then
+            nH_deg -= MouseDiff.X * 0.1
+            nT_deg += MouseDiff.Y * 0.1
         End If
 
+        If (Game.Focused) Then
+            Dim Middle = New Point(Game.formSize.Width / 2, Game.formSize.Height / 2)
+            Dim diffPnt = New PointF(Middle.X - Cursor.Position.X, Middle.Y - Cursor.Position.Y)
+            Cursor.Position = Middle
+            Game.InputState.Update(diffPnt)
+        End If
         If (Game.InputState.Left) Then
-            nE_m -= Math.Cos(Position.Heading_deg + 90) * 20
-            nN_m -= Math.Sin(Position.Heading_deg + 90) * 20
+            nE_m -= Math.Cos(ToRadians(Position.Heading_deg + 90)) * 100
+            nN_m -= Math.Sin(ToRadians(Position.Heading_deg + 90)) * 100
         End If
         If (Game.InputState.Right) Then
-            nE_m -= Math.Cos(Position.Heading_deg - 90) * 20
-            nN_m -= Math.Sin(Position.Heading_deg - 90) * 20
+            nE_m -= Math.Cos(ToRadians(Position.Heading_deg - 90)) * 100
+            nN_m -= Math.Sin(ToRadians(Position.Heading_deg - 90)) * 100
         End If
         If (Game.InputState.Forward) Then
-            nE_m += Math.Cos(Position.Heading_deg) * 20
-            nN_m += Math.Sin(Position.Heading_deg) * 20
+            nE_m += Math.Cos(ToRadians(Position.Heading_deg)) * 100
+            nN_m += Math.Sin(ToRadians(Position.Heading_deg)) * 100
         End If
         If (Game.InputState.Backward) Then
-            nE_m -= Math.Cos(Position.Heading_deg) * 20
-            nN_m -= Math.Sin(Position.Heading_deg) * 20
+            nE_m -= Math.Cos(ToRadians(Position.Heading_deg)) * 100
+            nN_m -= Math.Sin(ToRadians(Position.Heading_deg)) * 100
         End If
-        Motion = New Motion(Position, New GameVelocity(nE_m, nN_m, nU_m), DateTime.UtcNow)
+        Dim newPosition = New GamePosition(Position.East_m, Position.North_m, Position.Up_m, Position.Heading_deg + nH_deg, Position.Tilt_deg + nT_deg)
+        Motion = New Motion(newPosition, New GameVelocity(nE_m, nN_m, nU_m), DateTime.UtcNow)
     End Sub
     Private Sub Jump()
         If Motion.VelocityStamp.Up_ms = 0 Then
