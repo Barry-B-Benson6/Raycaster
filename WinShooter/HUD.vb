@@ -1,11 +1,15 @@
 ﻿Public Class HUD
 
-    Public Sub New(player As Player)
-        ClientPlayer = player
+    Public Sub New(playerId As Guid, game As Game)
+        ClientPlayerId = playerId
+        Me.game = game
     End Sub
-    Private Property ClientPlayer As WinShooter.Player
+
+    Private ReadOnly game As Game
+    Private Property ClientPlayerId As Guid
 
     Public Sub Render(e As PaintEventArgs, screenSize As Size)
+        Dim ClientPlayer As Player = game.Entities(ClientPlayerId)
         If (ClientPlayer.IsAiming) Then
             Dim gun = My.Resources.Resources.ADS_gun
             e.Graphics.DrawImage(gun, New Point((screenSize.Width / 2) - (gun.Width / 2), screenSize.Height - gun.Height))
