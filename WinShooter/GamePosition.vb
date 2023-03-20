@@ -31,7 +31,7 @@ Public Class GamePosition
     ''' Returns a vector3 representing the currentPosition
     ''' </summary>
     Public Function ToCellSpacePointF() As PointF
-        Return New PointF(East_m * Constants.CellSize_m, North_m * Constants.CellSize_m)
+        Return New PointF(East_m / Constants.CellSize_m, North_m / Constants.CellSize_m)
     End Function
 
 End Class

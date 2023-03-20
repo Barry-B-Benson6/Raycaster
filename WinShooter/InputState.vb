@@ -18,6 +18,18 @@
 
     Public Property Jumping As Boolean
 
+    Private _MouseDiff As New PointF(0, 0)
+    Public Property MouseDiff As PointF
+        Get
+            Dim temp = _MouseDiff
+            _MouseDiff = New PointF(0, 0)
+            Return temp
+        End Get
+        Private Set(value As PointF)
+            _MouseDiff = value
+        End Set
+    End Property
+
     ''' <summary>
     '''     Updates the input state based off the new keyboard input.
     ''' </summary>
@@ -54,5 +66,10 @@
             Case MouseButtons.Right
                 Aiming = isKeyDown
         End Select
+    End Sub
+
+    Public Sub Update(Diff_pnt As PointF)
+        RequireNotNull(Diff_pnt)
+        MouseDiff = Diff_pnt
     End Sub
 End Class

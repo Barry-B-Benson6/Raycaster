@@ -17,6 +17,9 @@ Public Class Renderer
     Private Property OwnPlayer As WinShooter.Player
 
     Public Sub Render(e As PaintEventArgs, formSize As Size)
+        e.Graphics.DrawString(OwnPlayer.Position.Heading_deg.ToString(), Form.DefaultFont, New SolidBrush(Color.Black), New PointF(0, 0))
+
+        Dim middle = formSize.Height / 2
         ''Draw Walls
         For i = 0 To Rays.Count - 1
             Dim collision As Ray.Collision = Rays(i).CheckCollision(Game.Map.map, OwnPlayer)
@@ -24,15 +27,16 @@ Public Class Renderer
                 Dim value = collision.Color
                 Dim point = collision.CollisionPoint
 
-                Dim distance = DistanceBetweenTwoPoints(New PointF(OwnPlayer.Position.East_m, OwnPlayer.Position.North_m), point)
+                Dim CellSpacePlayerPos = OwnPlayer.Position.ToCellSpacePointF()
+                Dim distance = DistanceBetweenTwoPoints(CellSpacePlayerPos, point)
                 Dim sectionWidth = formSize.Width / Rays.Count
                 Dim rectLeft = i * sectionWidth
 
                 Dim Diff = Rays(i).HeadingDiffFromCenterPov_deg
-                distance = Math.Abs(distance * Math.Cos(Diff))
+                distance = Math.Abs(distance * Math.Cos(ToRadians(Diff)))
 
                 Dim height = (formSize.Height / distance)
-                'If (distance < 1) Then height = Me.Height
+                If (distance < 1) Then height = formSize.Height
 
 
                 Dim percent = (height / (formSize.Height)) * 1.6
@@ -48,9 +52,10 @@ Public Class Renderer
                         colour = Color.FromArgb(0, 0, 255 * percent)
                 End Select
 
-                Dim yOffset = OwnPlayer.Position.Up_m * height
-                Dim Middle = formSize.Height / 2
-                e.Graphics.FillRectangle(New SolidBrush(colour), New Rectangle(New Point(rectLeft, Middle - (height / 2) + yOffset), New Size(sectionWidth + 1, height)))
+                colour = Color.Yellow
+
+                Dim yOffset = OwnPlayer.Position.Up_m / CellSize_m * height
+                e.Graphics.FillRectangle(New SolidBrush(colour), New Rectangle(New Point(rectLeft, middle - (height / 2)), New Size(sectionWidth + 1, height)))
 
             End If
 
@@ -58,6 +63,8 @@ Public Class Renderer
 
         ''See Entities
         For i = 0 To Game.Entities.Count - 1
+            ''Dont Draw Self
+            If (Game.Entities(i).Middle = OwnPlayer.Middle) Then Continue For
             Dim sightDistance = Nothing
             Dim raysOfSight = New List(Of UInt16)
             For j = 0 To Rays.Count - 1
@@ -99,14 +106,14 @@ Public Class Renderer
     End Sub
 
     Private Function SeeEntity(Entity As Entity, RayAngleDiff_deg As Decimal)
-        Dim rayAngle = OwnPlayer.Position.Heading_deg + RayAngleDiff_deg
+        Dim rayAngle_deg = OwnPlayer.Position.Heading_deg + RayAngleDiff_deg
         'Console.WriteLine(rayAngle * 180 / Math.PI)
 
-        If (rayAngle < 0) Then rayAngle += Math.PI * 2
-        If (rayAngle > Math.PI * 2) Then rayAngle -= Math.PI * 2
+        If (rayAngle_deg < 0) Then rayAngle_deg += 360
+        If (rayAngle_deg > 360) Then rayAngle_deg -= 360
 
-        If (Math.Cos(rayAngle) = 0 Or Math.Sin(rayAngle) = 0) Then Return Nothing
-        Dim rayGradient = (Math.Sin(rayAngle) / Math.Cos(rayAngle))
+        If (Math.Cos(ToRadians(rayAngle_deg)) = 0 Or Math.Sin(ToRadians(rayAngle_deg)) = 0) Then Return Nothing
+        Dim rayGradient = (Math.Sin(ToRadians(rayAngle_deg)) / Math.Cos(ToRadians(rayAngle_deg)))
         Dim c = -(OwnPlayer.Position.East_m * rayGradient) + OwnPlayer.Position.North_m
         'Console.Write(pntLocation.ToString())
         'Console.WriteLine("y = {0}x + {1}", rayGradient, c)
@@ -119,19 +126,19 @@ Public Class Renderer
         ''Now check if any of the points exist on the rectangles edges
         If (Entity.HitBox.Left <= xAtTop And xAtTop <= Entity.HitBox.Right) Then
             ''Hit Top (doesnt matter whether this is exit or entry)
-            Return CheckIfForward(rayAngle, Entity)
+            Return CheckIfForward(rayAngle_deg, Entity)
         End If
         If (Entity.HitBox.Left <= xAtBottom And xAtBottom <= Entity.HitBox.Right) Then
             ''Hit Bottom (doesnt matter whether this is exit or entry)
-            Return CheckIfForward(rayAngle, Entity)
+            Return CheckIfForward(rayAngle_deg, Entity)
         End If
         If (Entity.HitBox.Top <= yAtLeft And yAtLeft <= Entity.HitBox.Bottom) Then
             ''Hit Left (doesnt matter whether this is exit or entry)
-            Return CheckIfForward(rayAngle, Entity)
+            Return CheckIfForward(rayAngle_deg, Entity)
         End If
         If (Entity.HitBox.Top <= yAtRight And yAtRight <= Entity.HitBox.Bottom) Then
             ''Hit Right (doesnt matter whether this is exit or entry)
-            Return CheckIfForward(rayAngle, Entity)
+            Return CheckIfForward(rayAngle_deg, Entity)
         End If
 
         Return Nothing

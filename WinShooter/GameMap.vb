@@ -20,18 +20,18 @@ Public Class GameMap
         Dim BottomIndex = map.GetLength(1) - 1
         Dim topIndex = 0
         Dim leftIndex = 0
-        For i = 0 To RightIndex
+        For i = 0 To RightIndex - 1
             ''Checking Top wall has no holes
             If map(i, topIndex) = 0 Then Return False
             ''Checking Bottom wall has no holes
             If map(i, BottomIndex) = 0 Then Return False
         Next
 
-        For i = 0 To BottomIndex
+        For i = 0 To BottomIndex - 1
             ''Checking Left wall has no holes
-            If map(i, leftIndex) = 0 Then Return False
+            If map(leftIndex, i) = 0 Then Return False
             ''Checking Right wall has no holes
-            If map(i, RightIndex) = 0 Then Return False
+            If map(RightIndex, i) = 0 Then Return False
         Next
 
         Return True

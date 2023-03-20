@@ -67,7 +67,6 @@ Public Class Player
 
     Public Overrides Sub UpdatePosition(time As DateTime)
         Dim nextPosition = Motion.CalculatePositionAtTime(time)
-
         Try
             If (Game.Map.IsWallAt(nextPosition)) Then
                 Dim x = Math.Floor(nextPosition.East_m / CellSize_m)
@@ -107,6 +106,29 @@ Public Class Player
             End If
         End If
 
+        Dim nE_m, nN_m, nU_m, nH_deg, nT_deg As Decimal
+        If Game.InputState.MouseDiff <> New PointF(0, 0) Then
+            nH_deg += Game.InputState.MouseDiff.X
+            nT_deg += Game.InputState.MouseDiff.Y
+        End If
+
+        If (Game.InputState.Left) Then
+            nE_m -= Math.Cos(Position.Heading_deg + 90)
+            nN_m -= Math.Sin(Position.Heading_deg + 90)
+        End If
+        If (Game.InputState.Right) Then
+            nE_m -= Math.Cos(Position.Heading_deg - 90)
+            nN_m -= Math.Sin(Position.Heading_deg - 90)
+        End If
+        If (Game.InputState.Forward) Then
+            nE_m -= Math.Cos(Position.Heading_deg)
+            nN_m -= Math.Sin(Position.Heading_deg)
+        End If
+        If (Game.InputState.Backward) Then
+            nE_m += Math.Cos(Position.Heading_deg)
+            nN_m += Math.Sin(Position.Heading_deg)
+        End If
+        Motion = New Motion(Position, New GameVelocity(nE_m, nN_m, nU_m), DateTime.UtcNow)
     End Sub
     Private Sub Jump()
         If Motion.VelocityStamp.Up_ms = 0 Then

@@ -21,4 +21,9 @@ Public Module Constants
     ''' The Speed of a bullet in ms^-1
     ''' </summary>
     Public Const BulletSpeed_ms As Decimal = 2
+
+    ''' <summary>
+    ''' The rate at which the state updates in updates per second
+    ''' </summary>
+    Public Const StateUpdateRate As Integer = 240
 End Module
