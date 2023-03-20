@@ -4,6 +4,13 @@ Public Class Game
     Public Sub New(initialPositionPLayer As GamePosition, map As GameMap, fov As Integer, resQuality As Integer, form As Form)
 
         AddHandler form.Paint, AddressOf Render
+        AddHandler form.KeyDown, AddressOf KeyboardButtonDown
+        AddHandler form.KeyUp, AddressOf KeyboardButtonUp
+        AddHandler form.MouseDown, AddressOf MouseButtonDown
+        AddHandler form.MouseUp, AddressOf MouseButtonUp
+
+
+
         Me.Form = form
         Dim ClientPlayer = New Player("Cinnabun", New Motion(initialPositionPLayer, New GameVelocity(0, 0, 0), DateTime.UtcNow), Me, True)
         AddEntity(ClientPlayer)
@@ -22,7 +29,7 @@ Public Class Game
 
     Private ReadOnly Form As Form
 
-    Dim _Entities As Dictionary(Of Guid, Entity)
+    Dim _Entities As New Dictionary(Of Guid, Entity)
     Public Property Entities As Dictionary(Of Guid, Entity)
         Get
             Return _Entities
@@ -57,6 +64,7 @@ Public Class Game
     Private Sub funcRenderCycle()
         While True
             Form.Invoke(Sub() Form.Refresh())
+            Thread.Sleep(1)
         End While
     End Sub
 
@@ -65,6 +73,21 @@ Public Class Game
     End Sub
 
     Public Sub AddEntity(entity As Entity)
+        RequireNotNull(entity)
         Entities.Add(entity.EntityId, entity)
+    End Sub
+
+    Private Sub MouseButtonDown(sender As Object, e As MouseEventArgs)
+        InputState.Update(e.Button, True)
+    End Sub
+    Private Sub MouseButtonUp(sender As Object, e As MouseEventArgs)
+        InputState.Update(e.Button, False)
+    End Sub
+
+    Private Sub KeyboardButtonDown(sender As Object, e As KeyEventArgs)
+        InputState.Update(Keys.E.KeyCode, True)
+    End Sub
+    Private Sub KeyboardButtonUp(sender As Object, e As KeyEventArgs)
+        InputState.Update(Keys.E.KeyCode, False)
     End Sub
 End Class
