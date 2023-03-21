@@ -76,6 +76,8 @@ Public Class frmMain
         e.Graphics.FillRectangle(New SolidBrush(Color.LightBlue), New Rectangle(New Point(0, 0), New Size(Me.Width, Me.Height / 2)))
         e.Graphics.FillRectangle(New SolidBrush(Color.Green), New Rectangle(New Point(0, Middle), New Size(Me.Width, Me.Height / 2)))
 
+        Dim stopwatch = New Stopwatch()
+        stopwatch.Start()
         ''Draw Walls
         For i = 0 To rays.Count - 1
             Dim collision As Ray.Collision = rays(i).CheckCollision(Map, player)
@@ -113,7 +115,7 @@ Public Class frmMain
             End If
 
         Next
-
+        e.Graphics.DrawString((1000 / (stopwatch.ElapsedMilliseconds + 16)).ToString(), Form.DefaultFont, New SolidBrush(Color.Black), New PointF(0, 0))
         ''Move Bullets
         Dim newBullets = New List(Of Bullet)
         For Each bullet As Bullet In Bullets
@@ -127,7 +129,7 @@ Public Class frmMain
             Bullets(i).Move(Map)
         Next
 
-        e.Graphics.DrawString(player.decVerticalAngle.ToString(), Me.Font, New SolidBrush(Color.Black), New PointF(0, 0))
+        'e.Graphics.DrawString(player.decVerticalAngle.ToString(), Me.Font, New SolidBrush(Color.Black), New PointF(0, 0))
 
         ''See Bullets
         For i = 0 To Bullets.Count - 1
@@ -231,10 +233,10 @@ Public Class frmMain
 
         player.Move(Map)
         e.Graphics.ResetTransform()
-        e.Graphics.DrawString(player.Movement.Forward.ToString(), Me.Font, New SolidBrush(Color.Black), New PointF(0, 4))
-        e.Graphics.DrawString(player.Movement.Backward.ToString(), Me.Font, New SolidBrush(Color.Black), New PointF(0, 8))
-        e.Graphics.DrawString(player.Movement.Left.ToString(), Me.Font, New SolidBrush(Color.Black), New PointF(0, 12))
-        e.Graphics.DrawString(player.Movement.right.ToString(), Me.Font, New SolidBrush(Color.Black), New PointF(0, 16))
+        'e.Graphics.DrawString(player.Movement.Forward.ToString(), Me.Font, New SolidBrush(Color.Black), New PointF(0, 4))
+        'e.Graphics.DrawString(player.Movement.Backward.ToString(), Me.Font, New SolidBrush(Color.Black), New PointF(0, 8))
+        'e.Graphics.DrawString(player.Movement.Left.ToString(), Me.Font, New SolidBrush(Color.Black), New PointF(0, 12))
+        'e.Graphics.DrawString(player.Movement.right.ToString(), Me.Font, New SolidBrush(Color.Black), New PointF(0, 16))
 
     End Sub
 

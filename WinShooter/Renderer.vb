@@ -17,6 +17,7 @@ Public Class Renderer
     Private Property OwnPlayer As WinShooter.Player
 
     Public Sub Render(e As PaintEventArgs, formSize As Size)
+        Dim CopyOfPlayer = New Player(OwnPlayer)
 
         Dim middle = formSize.Height / 2
 
@@ -24,24 +25,24 @@ Public Class Renderer
         e.Graphics.FillRectangle(New SolidBrush(Color.Green), New Rectangle(New Point(0, middle), New Size(Game.formSize.Width, Game.formSize.Height / 2)))
 
         ''Draw Walls
-        DrawWalls(e, formSize)
+        DrawWalls(e, formSize, CopyOfPlayer)
 
         ''See Entities
-        DrawEntities(e, formSize)
+        DrawEntities(e, formSize, CopyOfPlayer)
 
         ''Draw Map
-        ''DrawMap(e, formSize)
+        DrawMap(e, formSize, CopyOfPlayer)
 
         HUD.Render(e, formSize)
         e.Graphics.ResetTransform()
     End Sub
 
-    Private Sub DrawMap(e As PaintEventArgs, formSize As Size)
+    Private Sub DrawMap(e As PaintEventArgs, formSize As Size, Player As Player)
         Dim sizCellSize = New Size(50, 50)
         Dim Map = Game.Map.map
         e.Graphics.ResetTransform()
 
-        Dim CellPlayerLocation = OwnPlayer.Position.ToCellSpacePointF
+        Dim CellPlayerLocation = Player.Position.ToCellSpacePointF
 
         For x = 0 To Map.GetLength(0) - 1
             For y = 0 To Map.GetLength(1) - 1
@@ -52,14 +53,14 @@ Public Class Renderer
         Next
         Dim player2dPoint = New Point(CellPlayerLocation.X * sizCellSize.Width, CellPlayerLocation.Y * sizCellSize.Height)
         e.Graphics.FillEllipse(New SolidBrush(Color.Blue), New Rectangle(New Point(player2dPoint.X - 10, player2dPoint.Y - 10), New Size(20, 20)))
-        e.Graphics.DrawLine(New Pen(Color.Black, 5), player2dPoint, New Point(player2dPoint.X + (Math.Cos(ToRadians(OwnPlayer.Position.Heading_deg)) * 10), player2dPoint.Y + (Math.Sin(ToRadians(OwnPlayer.Position.Heading_deg)) * 10)))
+        e.Graphics.DrawLine(New Pen(Color.Black, 5), player2dPoint, New Point(player2dPoint.X + (Math.Cos(ToRadians(Player.Position.Heading_deg)) * 10), player2dPoint.Y + (Math.Sin(ToRadians(Player.Position.Heading_deg)) * 10)))
 
 
 
 
         For i = 0 To Rays.Count - 1
             Dim ray = Rays(i)
-            Dim collision As Ray.Collision = ray.CheckCollision(Map, OwnPlayer)
+            Dim collision As Ray.Collision = ray.CheckCollision(Map, Player)
             If (collision IsNot Nothing) Then
                 Dim collisionPoint As PointF = collision.CollisionPoint
                 e.Graphics.DrawLine(New Pen(Color.Red), player2dPoint, New Point(collisionPoint.X * sizCellSize.Width, collisionPoint.Y * sizCellSize.Height))
@@ -68,7 +69,7 @@ Public Class Renderer
 
         Dim entities = New Dictionary(Of Guid, Entity)(Game.Entities).Values
         For i = 0 To entities.Count - 1
-            Dim cellEntityPos = entities(i).Position.ToCellSpacePointF()
+            Dim cellEntityPos = New PointF(entities(i).HitBox.Right / CellSize_m, entities(i).HitBox.Bottom / CellSize_m)
             Dim cellEntitySize = entities(i).HitBox.Size / Constants.CellSize_m
             Dim entity2dPoint = New Point((cellEntityPos.X - cellEntitySize.Width) * sizCellSize.Width, (cellEntityPos.Y - cellEntitySize.Height) * sizCellSize.Height)
 
@@ -76,7 +77,7 @@ Public Class Renderer
         Next
     End Sub
 
-    Private Sub DrawEntities(e As PaintEventArgs, formSize As Size)
+    Private Sub DrawEntities(e As PaintEventArgs, formSize As Size, Player As Player)
         Dim Entities = New Dictionary(Of Guid, Entity)(Game.Entities)
         For i = 0 To Entities.Count - 1
             ''Dont Draw Self
@@ -85,12 +86,17 @@ Public Class Renderer
             Dim raysOfSight = New List(Of UInt16)
             For j = 0 To Rays.Count - 1
                 ''SightPoint in gamespace
-                Dim Sight As PointF = SeeEntity(Entities.Values(i), Rays(j).HeadingDiffFromCenterPov_deg)
+                Dim Sight As PointF = SeeEntity(Entities.Values(i), Rays(j).HeadingDiffFromCenterPov_deg, Player)
                 If (Sight = Nothing) Then Continue For
                 Sight = New PointF(Sight.X / Constants.CellSize_m, Sight.Y / Constants.CellSize_m)
-                sightDistance = DistanceBetweenTwoPoints(New PointF(OwnPlayer.Position.East_m / Constants.CellSize_m, OwnPlayer.Position.North_m / Constants.CellSize_m), Sight)
 
-                Dim rayCollision As Ray.Collision = Rays(j).CheckCollision(Game.Map.map, OwnPlayer)
+                Dim sizCellSize = New Size(50, 50)
+                Dim PlayerPOs = Player.Position.ToCellSpacePointF()
+                e.Graphics.DrawLine(New Pen(Color.Purple), New Point(PlayerPOs.X * sizCellSize.Width, PlayerPOs.Y * sizCellSize.Height), New Point(Sight.X * sizCellSize.Width, Sight.Y * sizCellSize.Height))
+
+                sightDistance = DistanceBetweenTwoPoints(New PointF(Player.Position.East_m / Constants.CellSize_m, Player.Position.North_m / Constants.CellSize_m), Sight)
+
+                Dim rayCollision As Ray.Collision = Rays(j).CheckCollision(Game.Map.map, Player)
 
                 ''TODO: ThIS MAKE THE BULLETS KINDA FUNKY, FIX IT
 
@@ -115,22 +121,22 @@ Public Class Renderer
             Dim rectleft = rayIndex * sectionwidth
             If (sightDistance = 0) Then Continue For
 
-            Entities.Values(i).Draw(sightDistance, rectleft, formSize, OwnPlayer.Position.Up_m, e)
+            Entities.Values(i).Draw(sightDistance, rectleft, formSize, Player.Position.Up_m, e)
         Next
     End Sub
 
-    Private Sub DrawWalls(e As PaintEventArgs, formSize As Size)
+    Private Sub DrawWalls(e As PaintEventArgs, formSize As Size, Player As Player)
         Dim stopwatch = New Stopwatch()
         stopwatch.Start()
 
         Dim middle = formSize.Height / 2
         For i = 0 To Rays.Count - 1
-            Dim collision As Ray.Collision = Rays(i).CheckCollision(Game.Map.map, OwnPlayer)
+            Dim collision As Ray.Collision = Rays(i).CheckCollision(Game.Map.map, Player)
             If (Not collision Is Nothing) Then
                 Dim value = collision.Color
                 Dim point = collision.CollisionPoint
 
-                Dim distance = DistanceBetweenTwoPoints(OwnPlayer.Position.ToCellSpacePointF(), point)
+                Dim distance = DistanceBetweenTwoPoints(Player.Position.ToCellSpacePointF(), point)
                 Dim sectionWidth = formSize.Width / Rays.Count
                 Dim rectLeft = i * sectionWidth
 
@@ -154,7 +160,7 @@ Public Class Renderer
                         colour = Color.FromArgb(0, 0, 255 * percent)
                 End Select
 
-                Dim yOffset = OwnPlayer.Position.Up_m / Constants.CellSize_m * height
+                Dim yOffset = Player.Position.Up_m / Constants.CellSize_m * height
                 e.Graphics.FillRectangle(New SolidBrush(colour), New Rectangle(New Point(rectLeft, middle - (height / 2) + yOffset), New Size(sectionWidth + 1, height)))
 
             End If
@@ -165,8 +171,8 @@ Public Class Renderer
         'Console.WriteLine(1000 / stopwatch.ElapsedMilliseconds)
     End Sub
 
-    Private Function SeeEntity(Entity As Entity, RayAngleDiff_deg As Decimal)
-        Dim rayAngle_deg = OwnPlayer.Position.Heading_deg + RayAngleDiff_deg
+    Private Function SeeEntity(Entity As Entity, RayAngleDiff_deg As Decimal, player As Player)
+        Dim rayAngle_deg = player.Position.Heading_deg + RayAngleDiff_deg
         'Console.WriteLine(rayAngle * 180 / Math.PI)
 
         If (rayAngle_deg < 0) Then rayAngle_deg += 360
@@ -174,14 +180,20 @@ Public Class Renderer
 
         If (Math.Cos(ToRadians(rayAngle_deg)) = 0 Or Math.Sin(ToRadians(rayAngle_deg)) = 0) Then Return Nothing
         Dim rayGradient = (Math.Sin(ToRadians(rayAngle_deg)) / Math.Cos(ToRadians(rayAngle_deg)))
-        Dim c = -(OwnPlayer.Position.East_m * rayGradient) + OwnPlayer.Position.North_m
+        Dim c = -(player.Position.East_m * rayGradient) + player.Position.North_m
         'Console.Write(pntLocation.ToString())
         'Console.WriteLine("y = {0}x + {1}", rayGradient, c)
 
-        Dim xAtTop = (Entity.HitBox.Top - c) / rayGradient
-        Dim xAtBottom = (Entity.HitBox.Bottom - c) / rayGradient
-        Dim yAtLeft = (rayGradient * Entity.HitBox.Left) + c
-        Dim yAtRight = (rayGradient * Entity.HitBox.Right) + c
+        Dim top = Entity.Position.Up_m + (Entity.HitBox.Size.Height / 2)
+        Dim bottom = Entity.Position.Up_m - (Entity.HitBox.Size.Height / 2)
+        Dim left = Entity.Position.East_m - (Entity.HitBox.Size.Width / 2)
+        Dim right = Entity.Position.East_m + (Entity.HitBox.Size.Width / 2)
+
+
+        Dim xAtTop = (top - c) / rayGradient
+        Dim xAtBottom = (bottom - c) / rayGradient
+        Dim yAtLeft = (rayGradient * left) + c
+        Dim yAtRight = (rayGradient * right) + c
 
         ''Now check if any of the points exist on the rectangles edges
         If (Entity.HitBox.Left <= xAtTop And xAtTop <= Entity.HitBox.Right) Then

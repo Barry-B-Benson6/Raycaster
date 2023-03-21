@@ -5,7 +5,7 @@ Public Module Constants
     ''' <summary>
     ''' The acceleration due to gravity, in metres per second squared.
     ''' </summary>
-    Public Const G_mss As Decimal = 9.81
+    Public Const G_mss As Decimal = 30
 
     ''' <summary>
     ''' The width, in metres, of a single cell of the map.

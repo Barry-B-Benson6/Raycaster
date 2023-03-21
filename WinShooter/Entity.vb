@@ -34,7 +34,7 @@ Public MustInherit Class Entity
     Private _HitBox As RectangleF
     Public Property HitBox As RectangleF
         Get
-            Return New RectangleF(New PointF(Position.East_m + (_HitBox.Size.Width / 2), Position.North_m - (_HitBox.Size.Height / 2)), _HitBox.Size)
+            Return New RectangleF(New PointF(Position.East_m - (_HitBox.Size.Width / 2), Position.North_m - (_HitBox.Size.Height / 2)), _HitBox.Size)
         End Get
         Set(value As RectangleF)
             _HitBox = value

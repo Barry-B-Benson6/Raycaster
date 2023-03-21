@@ -19,6 +19,16 @@ Public Class Player
         LastBulletFire = DateTime.UtcNow().AddSeconds(-(1 / Constants.FireRate_s))
     End Sub
 
+    ''' <summary>
+    ''' Used for copying a player
+    ''' </summary>
+    ''' <param name="plr"></param>
+    Public Sub New(plr As Player)
+        MyBase.New(plr.Name, plr.Motion, plr.Game, plr.LocallyOwned)
+        isPLayer = True
+        LastBulletFire = plr.LastBulletFire
+    End Sub
+
     Private _isCrouching As Boolean
     Public Property IsCrouching As Boolean
         Get
@@ -140,14 +150,14 @@ Public Class Player
         End If
         Dim newPosition = New GamePosition(Position.East_m, Position.North_m, Position.Up_m, Position.Heading_deg + nH_deg, Position.Tilt_deg + nT_deg)
 
-        nU_ms = Motion.VelocityStamp.Up_ms - (Constants.G_mss * DateTime.UtcNow.Subtract(Motion.TimeStamp).TotalSeconds)
+        nU_ms = Motion.VelocityStamp.Up_ms - (Constants.G_mss * DateTime.UtcNow.Subtract(Motion.TimeStamp).TotalSeconds * 2)
         If (Position.Up_m = 0 And nU_ms < 0) Then nU_ms = 0
         Motion = New Motion(newPosition, New GameVelocity(nE_m, nN_m, nU_ms), DateTime.UtcNow)
     End Sub
     Private Sub Jump()
         If Motion.VelocityStamp.Up_ms = 0 Then
             ''5.111 is the initial velocity that causes a jump height of 1.333
-            Dim JumpVel_ms = 25
+            Dim JumpVel_ms = 40
             Motion = New Motion(Position, New GameVelocity(Motion.VelocityStamp.East_ms, Motion.VelocityStamp.North_ms, JumpVel_ms), DateTime.UtcNow)
         End If
     End Sub
