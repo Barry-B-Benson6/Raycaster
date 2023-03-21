@@ -30,7 +30,7 @@ Public Class Renderer
         DrawEntities(e, formSize)
 
         ''Draw Map
-        ''DrawMap(e, formSize)
+        DrawMap(e, formSize)
 
         HUD.Render(e, formSize)
         e.Graphics.ResetTransform()
@@ -65,6 +65,16 @@ Public Class Renderer
                 Dim collisionPoint As PointF = collision.CollisionPoint
                 e.Graphics.DrawLine(New Pen(Color.Red), player2dPoint, New Point(collisionPoint.X * sizCellSize.Width, collisionPoint.Y * sizCellSize.Height))
             End If
+        Next
+
+        Dim entities = New Dictionary(Of Guid, Entity)(Game.Entities).Values
+        For i = 0 To entities.Count - 1
+            Dim cellEntityPos = entities(i).Position.ToCellSpacePointF()
+            Dim cellEntitySize = entities(i).HitBox.Size / Constants.CellSize_m
+            Dim entity2dPoint = New Point((cellEntityPos.X - cellEntitySize.Width) * sizCellSize.Width, (cellEntityPos.Y - cellEntitySize.Height) * sizCellSize.Height)
+
+            e.Graphics.DrawRectangle(New Pen(Color.Blue), New Rectangle(entity2dPoint, New Size(20, 20)))
+            e.Graphics.DrawString(entities(i).IsAlive.ToString(), Form.DefaultFont, New SolidBrush(Color.Black), entity2dPoint)
         Next
     End Sub
 

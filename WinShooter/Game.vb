@@ -63,13 +63,23 @@ Public Class Game
                 Entities.Values(i).UpdateState(DateTime.UtcNow)
                 Entities.Values(i).UpdatePosition(DateTime.UtcNow)
             Next
+
+            For Each keyValue In Entities
+                If (Not keyValue.Value.IsAlive) Then
+                    Entities.Remove(keyValue.Key)
+                End If
+            Next
         End While
     End Sub
 
     Private Sub funcRenderCycle()
         While True
-            Form.Invoke(Sub() Form.Refresh())
-            Thread.Sleep(10)
+            Try
+                Form.Invoke(Sub() Form.Refresh())
+            Catch ex As Exception
+                End
+            End Try
+            Thread.Sleep(5)
         End While
     End Sub
 

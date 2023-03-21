@@ -103,6 +103,7 @@ Public Class Player
             If (timeBetweenNowAndLast.TotalSeconds > (1 / FireRate_s)) Then
                 Dim newBullet = CreateBullet(time)
                 Game.AddEntity(newBullet)
+                LastBulletFire = DateTime.UtcNow
             End If
         End If
 
