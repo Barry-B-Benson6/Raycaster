@@ -34,7 +34,6 @@ Public Class Renderer
 
         HUD.Render(e, formSize)
         e.Graphics.ResetTransform()
-        e.Graphics.DrawString(OwnPlayer.Position.Up_m, Form.DefaultFont, New SolidBrush(Color.Black), New PointF(0, 0))
     End Sub
 
     Private Sub DrawMap(e As PaintEventArgs, formSize As Size)
@@ -74,7 +73,6 @@ Public Class Renderer
             Dim entity2dPoint = New Point((cellEntityPos.X - cellEntitySize.Width) * sizCellSize.Width, (cellEntityPos.Y - cellEntitySize.Height) * sizCellSize.Height)
 
             e.Graphics.DrawRectangle(New Pen(Color.Blue), New Rectangle(entity2dPoint, New Size(20, 20)))
-            e.Graphics.DrawString(entities(i).IsAlive.ToString(), Form.DefaultFont, New SolidBrush(Color.Black), entity2dPoint)
         Next
     End Sub
 
@@ -122,6 +120,9 @@ Public Class Renderer
     End Sub
 
     Private Sub DrawWalls(e As PaintEventArgs, formSize As Size)
+        Dim stopwatch = New Stopwatch()
+        stopwatch.Start()
+
         Dim middle = formSize.Height / 2
         For i = 0 To Rays.Count - 1
             Dim collision As Ray.Collision = Rays(i).CheckCollision(Game.Map.map, OwnPlayer)
@@ -159,6 +160,9 @@ Public Class Renderer
             End If
 
         Next
+        Dim font = Form.DefaultFont
+        e.Graphics.DrawString((1000 / stopwatch.ElapsedMilliseconds).ToString(), Form.DefaultFont, New SolidBrush(Color.Black), New Point(0, 0))
+        'Console.WriteLine(1000 / stopwatch.ElapsedMilliseconds)
     End Sub
 
     Private Function SeeEntity(Entity As Entity, RayAngleDiff_deg As Decimal)

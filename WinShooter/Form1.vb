@@ -34,7 +34,7 @@
             {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}
         }
         Dim map = New GameMap(mapValue)
-        game = New Game(New GamePosition(4, 4, 0), map, 90, 720, Me)
+        game = New Game(New GamePosition(4, 4, 0), map, 90, 180, Me)
         game.Start()
     End Sub
 End Class
