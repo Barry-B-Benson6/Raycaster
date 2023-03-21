@@ -15,7 +15,7 @@ Public Module Constants
     ''' <summary>
     ''' The Fire rate in shots per second
     ''' </summary>
-    Public Const FireRate_s As Decimal = 4
+    Public Const FireRate_s As Decimal = 2
 
     ''' <summary>
     ''' The Speed of a bullet in ms^-1

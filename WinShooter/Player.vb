@@ -15,6 +15,7 @@ Public Class Player
 
     Public Sub New(name As String, initialMovement As Motion, game As Game, locallyOwned As Boolean)
         MyBase.New(name, initialMovement, game, locallyOwned)
+        isPLayer = True
         LastBulletFire = DateTime.UtcNow().AddSeconds(-(1 / Constants.FireRate_s))
     End Sub
 
@@ -107,7 +108,7 @@ Public Class Player
             End If
         End If
 
-        Dim nE_m, nN_m, nU_m, nH_deg, nT_deg As Decimal
+        Dim nE_m, nN_m, nU_ms, nH_deg, nT_deg As Decimal
         Dim MouseDiff = Game.InputState.MouseDiff
 
         If MouseDiff <> New PointF(0, 0) Then
@@ -138,13 +139,16 @@ Public Class Player
             nN_m -= Math.Sin(ToRadians(Position.Heading_deg)) * 100
         End If
         Dim newPosition = New GamePosition(Position.East_m, Position.North_m, Position.Up_m, Position.Heading_deg + nH_deg, Position.Tilt_deg + nT_deg)
-        Motion = New Motion(newPosition, New GameVelocity(nE_m, nN_m, nU_m), DateTime.UtcNow)
+
+        nU_ms = Motion.VelocityStamp.Up_ms - (Constants.G_mss * DateTime.UtcNow.Subtract(Motion.TimeStamp).TotalSeconds)
+        If (Position.Up_m = 0 And nU_ms < 0) Then nU_ms = 0
+        Motion = New Motion(newPosition, New GameVelocity(nE_m, nN_m, nU_ms), DateTime.UtcNow)
     End Sub
     Private Sub Jump()
         If Motion.VelocityStamp.Up_ms = 0 Then
             ''5.111 is the initial velocity that causes a jump height of 1.333
-            Dim JumpVel_ms = 5.111
-            Motion = New Motion(Position, New GameVelocity(Motion.VelocityStamp.East_ms, Motion.VelocityStamp.North_ms, JumpVel_ms), DateTime.Now())
+            Dim JumpVel_ms = 25
+            Motion = New Motion(Position, New GameVelocity(Motion.VelocityStamp.East_ms, Motion.VelocityStamp.North_ms, JumpVel_ms), DateTime.UtcNow)
         End If
     End Sub
 

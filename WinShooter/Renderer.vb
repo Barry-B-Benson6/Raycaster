@@ -30,11 +30,11 @@ Public Class Renderer
         DrawEntities(e, formSize)
 
         ''Draw Map
-        DrawMap(e, formSize)
+        ''DrawMap(e, formSize)
 
         HUD.Render(e, formSize)
         e.Graphics.ResetTransform()
-        e.Graphics.DrawString(OwnPlayer.Position.Heading_deg, Form.DefaultFont, New SolidBrush(Color.Black), New PointF(0, 0))
+        e.Graphics.DrawString(OwnPlayer.Position.Up_m, Form.DefaultFont, New SolidBrush(Color.Black), New PointF(0, 0))
     End Sub
 
     Private Sub DrawMap(e As PaintEventArgs, formSize As Size)
@@ -82,15 +82,15 @@ Public Class Renderer
         Dim Entities = New Dictionary(Of Guid, Entity)(Game.Entities)
         For i = 0 To Entities.Count - 1
             ''Dont Draw Self
-            If (Entities.Values(i).Middle = OwnPlayer.Middle) Then Continue For
+            If (Entities.Values(i).LocallyOwned And Entities.Values(i).isPLayer) Then Continue For
             Dim sightDistance = Nothing
             Dim raysOfSight = New List(Of UInt16)
             For j = 0 To Rays.Count - 1
                 ''SightPoint in gamespace
                 Dim Sight As PointF = SeeEntity(Entities.Values(i), Rays(j).HeadingDiffFromCenterPov_deg)
                 If (Sight = Nothing) Then Continue For
-
-                sightDistance = DistanceBetweenTwoPoints(New PointF(OwnPlayer.Position.East_m, OwnPlayer.Position.North_m), Sight)
+                Sight = New PointF(Sight.X / Constants.CellSize_m, Sight.Y / Constants.CellSize_m)
+                sightDistance = DistanceBetweenTwoPoints(New PointF(OwnPlayer.Position.East_m / Constants.CellSize_m, OwnPlayer.Position.North_m / Constants.CellSize_m), Sight)
 
                 Dim rayCollision As Ray.Collision = Rays(j).CheckCollision(Game.Map.map, OwnPlayer)
 

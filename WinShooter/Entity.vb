@@ -9,9 +9,20 @@ Public MustInherit Class Entity
         Me.IsAlive = True
         Me.isDirty = True
         Me.LocallyOwned = locallyOwned
+        isPLayer = False
         Position = motion.CalculatePositionAtTime(DateTime.UtcNow)
         HitBox = New RectangleF(New PointF(Position.East_m, Position.North_m), New SizeF(0.8, 0.8))
     End Sub
+
+    Private _isPLayer
+    Public Property isPLayer As Boolean
+        Get
+            Return _isPLayer
+        End Get
+        Protected Set(value As Boolean)
+            _isPLayer = value
+        End Set
+    End Property
 
     ''' <summary>
     ''' This exists to allow us to create mocks of this class, it should not be used any other time
@@ -23,7 +34,7 @@ Public MustInherit Class Entity
     Private _HitBox As RectangleF
     Public Property HitBox As RectangleF
         Get
-            Return _HitBox
+            Return New RectangleF(New PointF(Position.East_m + (_HitBox.Size.Width / 2), Position.North_m - (_HitBox.Size.Height / 2)), _HitBox.Size)
         End Get
         Set(value As RectangleF)
             _HitBox = value
