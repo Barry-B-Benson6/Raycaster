@@ -1,7 +1,7 @@
 ﻿Imports System.Numerics
 
 Public MustInherit Class Entity
-    Public Sub New(name As String, motion As Motion, game As Game, locallyOwned As Boolean)
+    Public Sub New(name As String, motion As Motion, game As Game, locallyOwned As Boolean, hitBoxSize As SizeF)
         Me.Name = RequireNotNull(name)
         Me.Motion = RequireNotNull(motion)
         Me.EntityId = Guid.NewGuid()
@@ -11,7 +11,7 @@ Public MustInherit Class Entity
         Me.LocallyOwned = locallyOwned
         isPLayer = False
         Position = motion.CalculatePositionAtTime(DateTime.UtcNow)
-        HitBox = New RectangleF(New PointF(Position.East_m, Position.North_m), New SizeF(0.8, 0.8))
+        HitBox = New RectangleF(New PointF(Position.East_m, Position.North_m), hitBoxSize)
     End Sub
 
     Private _isPLayer
@@ -140,7 +140,7 @@ Public MustInherit Class Entity
         End Get
     End Property
 
-    Public MustOverride Sub Draw(Distance As Decimal, xCoordOfMiddle As Integer, formSize As Size, PlayerZ As Decimal, e As PaintEventArgs)
+    Public MustOverride Sub Draw(Distance As Decimal, xCoordOfMiddle As Integer, formSize As Size, PlayerZ As Decimal, e As PaintEventArgs, fov As Integer)
     Public MustOverride Sub UpdateState(time As DateTime)
 
     Public Overridable Sub UpdatePosition(time As DateTime)

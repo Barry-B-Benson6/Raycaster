@@ -2,12 +2,18 @@
 
 Public Class Renderer
 
-    Public Sub New(Hud As HUD, rays As List(Of Ray), ClientPlayer As Player, Game As Game)
+    Public Sub New(Hud As HUD, rays As List(Of Ray), ClientPlayer As Player, Game As Game, fov As Integer)
         Me.Game = Game
         Me.HUD = Hud
         Me.Rays = rays
         Me.OwnPlayer = ClientPlayer
+        Me.Fov = fov
     End Sub
+
+    ''' <summary>
+    ''' the number of degrees as an integer that the renderers sight spans 
+    ''' </summary>
+    Private ReadOnly Fov As Integer
 
     Private Property Game As Game
     Private Property HUD As HUD
@@ -31,7 +37,7 @@ Public Class Renderer
         DrawEntities(e, formSize, CopyOfPlayer)
 
         ''Draw Map
-        DrawMap(e, formSize, CopyOfPlayer)
+        ''DrawMap(e, formSize, CopyOfPlayer)
 
         HUD.Render(e, formSize)
         e.Graphics.ResetTransform()
@@ -63,7 +69,7 @@ Public Class Renderer
             Dim collision As Ray.Collision = ray.CheckCollision(Map, Player)
             If (collision IsNot Nothing) Then
                 Dim collisionPoint As PointF = collision.CollisionPoint
-                e.Graphics.DrawLine(New Pen(Color.Red), player2dPoint, New Point(collisionPoint.X * sizCellSize.Width, collisionPoint.Y * sizCellSize.Height))
+                e.Graphics.DrawLine(New Pen(Color.FromArgb(40, Color.Red)), player2dPoint, New Point(collisionPoint.X * sizCellSize.Width, collisionPoint.Y * sizCellSize.Height))
             End If
         Next
 
@@ -74,54 +80,85 @@ Public Class Renderer
             Dim entity2dPoint = New Point((cellEntityPos.X - cellEntitySize.Width) * sizCellSize.Width, (cellEntityPos.Y - cellEntitySize.Height) * sizCellSize.Height)
 
             e.Graphics.DrawRectangle(New Pen(Color.Blue), New Rectangle(entity2dPoint, New Size(20, 20)))
+            e.Graphics.DrawString(entities(i).Position.ToCellSpacePointF().ToString(), Form.DefaultFont, New SolidBrush(Color.Black), entity2dPoint)
         Next
+
+        e.Graphics.DrawLine(New Pen(Color.HotPink), player2dPoint, New Point(player2dPoint.X + (Math.Cos(0) * 30), player2dPoint.Y - (Math.Sin(0) * 30)))
     End Sub
 
     Private Sub DrawEntities(e As PaintEventArgs, formSize As Size, Player As Player)
         Dim Entities = New Dictionary(Of Guid, Entity)(Game.Entities)
+        Dim playerPos = Player.Position.ToCellSpacePointF()
         For i = 0 To Entities.Count - 1
             ''Dont Draw Self
             If (Entities.Values(i).LocallyOwned And Entities.Values(i).isPLayer) Then Continue For
-            Dim sightDistance = Nothing
-            Dim raysOfSight = New List(Of UInt16)
-            For j = 0 To Rays.Count - 1
-                ''SightPoint in gamespace
-                Dim Sight As PointF = SeeEntity(Entities.Values(i), Rays(j).HeadingDiffFromCenterPov_deg, Player)
-                If (Sight = Nothing) Then Continue For
-                Sight = New PointF(Sight.X / Constants.CellSize_m, Sight.Y / Constants.CellSize_m)
+            Dim entityPos = Entities.Values(i).Position.ToCellSpacePointF()
 
-                Dim sizCellSize = New Size(50, 50)
-                Dim PlayerPOs = Player.Position.ToCellSpacePointF()
-                e.Graphics.DrawLine(New Pen(Color.Purple), New Point(PlayerPOs.X * sizCellSize.Width, PlayerPOs.Y * sizCellSize.Height), New Point(Sight.X * sizCellSize.Width, Sight.Y * sizCellSize.Height))
+            Dim VectorBetween = New PointF(entityPos.X - playerPos.X, entityPos.Y - playerPos.Y)
 
-                sightDistance = DistanceBetweenTwoPoints(New PointF(Player.Position.East_m / Constants.CellSize_m, Player.Position.North_m / Constants.CellSize_m), Sight)
+            Dim angleOfVector_deg As Decimal
 
-                Dim rayCollision As Ray.Collision = Rays(j).CheckCollision(Game.Map.map, Player)
+            If (VectorBetween.Y > 0) Then
+                If (VectorBetween.X > 0) Then
+                    ''The Vector between is in the top right quadrant
+                    angleOfVector_deg = 90 - ToDegrees(Math.Atan(VectorBetween.X / VectorBetween.Y))
+                ElseIf (VectorBetween.X < 0) Then
+                    ''The Vector between is in the top left quadrant
+                    angleOfVector_deg = 180 + ToDegrees(Math.Atan(VectorBetween.Y / VectorBetween.X))
+                Else
+                    ''the vector between the two is veritcal up
+                    angleOfVector_deg = 0
+                End If
+            ElseIf (VectorBetween.Y < 0) Then
+                If (VectorBetween.X > 0) Then
+                    ''The vector between is in the bottom right quadrant
+                    angleOfVector_deg = 0 + ToDegrees(Math.Atan(VectorBetween.Y / VectorBetween.X))
+                ElseIf (VectorBetween.X < 0) Then
+                    ''The Vector between is in the bottom left quadrant
+                    angleOfVector_deg = 180 + (90 - ToDegrees(Math.Atan(VectorBetween.X / VectorBetween.Y)))
+                Else
+                    ''The vector between is vertical down
+                    angleOfVector_deg = 180
+                End If
+            Else
+                If (VectorBetween.X > 0) Then
+                    ''The vector between is horizontal right
+                    angleOfVector_deg = 90
+                ElseIf (VectorBetween.x < 0) Then
+                    ''The vector between is horizontal left
+                    angleOfVector_deg = 270
+                Else
+                    ''The entity is in the same position as the player
+                    Continue For
+                End If
+            End If
 
-                ''TODO: ThIS MAKE THE BULLETS KINDA FUNKY, FIX IT
 
-                '''Check if the current ray can also see a wall
-                'If (rayCollision.Point <> Nothing) Then
-                '    Dim wallDistance = DistanceBetweenTwoPoints(player.pntLocation, rayCollision.Point)
-                '    ''check if the wall is obscuring the bullet
-                '    If (wallDistance < sightDistance) Then Continue For
-                'End If
+            Dim slopeOfVector = VectorBetween.Y / VectorBetween.X
 
-                ''add rayIndex to list of rays that can see the bullet
-                raysOfSight.Add(j)
-            Next
-            If (raysOfSight.Count = 0) Then Continue For
-            ''If here then the the bullet has been seen
+            Dim startFov_deg = Player.Position.Heading_deg + Rays(0).HeadingDiffFromCenterPov_deg
+            Dim endFov_deg = Player.Position.Heading_deg + Rays(Rays.Count - 1).HeadingDiffFromCenterPov_deg
 
-            ''Find the middle of the section of the screen where the bullet is seen
-            Dim rayIndex = raysOfSight(Math.Floor(raysOfSight.Count / 2))
 
-            Dim sectionwidth = formSize.Width / Rays.Count
-            ''Find the x coord of where the center of the bullet will be drawn
-            Dim rectleft = rayIndex * sectionwidth
-            If (sightDistance = 0) Then Continue For
+            Dim inFov = IsBetween(startFov_deg, endFov_deg, angleOfVector_deg)
 
-            Entities.Values(i).Draw(sightDistance, rectleft, formSize, Player.Position.Up_m, e)
+            If inFov Then
+                ''Now check if obstructed
+                Dim diff = DifferenceBetweenAngles(Player.Position.Heading_deg, angleOfVector_deg)
+                Dim tempRay = New Ray(diff)
+                Dim collision = tempRay.CheckCollision(Game.Map.map, Player)
+                Dim EntityDistance = LengthOfVector(VectorBetween)
+                If (collision IsNot Nothing) Then
+                    Dim wallDistance = DistanceBetweenTwoPoints(Player.Position.ToCellSpacePointF(), collision.CollisionPoint)
+                    If (wallDistance < EntityDistance) Then Continue For
+                End If
+
+                Dim percentInFovThatSightIs = DifferenceBetweenAngles(startFov_deg, angleOfVector_deg) / DifferenceBetweenAngles(startFov_deg, endFov_deg)
+                Dim xCoordToDrawCenter As Integer = Math.Floor(formSize.Width * percentInFovThatSightIs)
+                Entities.Values(i).Draw(EntityDistance, xCoordToDrawCenter, formSize, Player.Position.Up_m, e, Fov)
+
+            End If
+
         Next
     End Sub
 

@@ -14,7 +14,7 @@ Public Class Player
     Private LastBulletFire As DateTime
 
     Public Sub New(name As String, initialMovement As Motion, game As Game, locallyOwned As Boolean)
-        MyBase.New(name, initialMovement, game, locallyOwned)
+        MyBase.New(name, initialMovement, game, locallyOwned, New Size(0.8, 0.8))
         isPLayer = True
         LastBulletFire = DateTime.UtcNow().AddSeconds(-(1 / Constants.FireRate_s))
     End Sub
@@ -24,7 +24,7 @@ Public Class Player
     ''' </summary>
     ''' <param name="plr"></param>
     Public Sub New(plr As Player)
-        MyBase.New(plr.Name, plr.Motion, plr.Game, plr.LocallyOwned)
+        MyBase.New(plr.Name, plr.Motion, plr.Game, plr.LocallyOwned, plr.HitBox.Size)
         isPLayer = True
         LastBulletFire = plr.LastBulletFire
     End Sub
@@ -66,7 +66,7 @@ Public Class Player
         Return New Bullet(Me, New Motion(Position, velocity, time), Game, True)
     End Function
 
-    Public Overrides Sub Draw(Distance As Decimal, xCoordOfMiddle As Integer, formSize As Size, PlayerZ As Decimal, e As PaintEventArgs)
+    Public Overrides Sub Draw(Distance As Decimal, xCoordOfMiddle As Integer, formSize As Size, PlayerZ As Decimal, e As PaintEventArgs, fov As Integer)
         Throw New NotImplementedException()
     End Sub
 

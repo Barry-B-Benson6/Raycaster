@@ -1,7 +1,7 @@
 ﻿Public Class Bullet
     Inherits Entity
     Public Sub New(shooter As Player, motion As Motion, game As Game, localllyOwned As Boolean)
-        MyBase.New(shooter.Name + "'s Bullet", motion, game, localllyOwned)
+        MyBase.New(shooter.Name + "'s Bullet", motion, game, localllyOwned, New SizeF(0.1, 0.1))
         Me.Shooter = RequireNotNull(shooter)
     End Sub
 
@@ -20,8 +20,14 @@
         End If
     End Sub
 
-    Public Overrides Sub Draw(Distance As Decimal, xCoordOfMiddle As Integer, formSize As Size, PlayerZ As Decimal, e As PaintEventArgs)
-        Dim size = New Size((formSize.Height / 5 / Distance), (formSize.Height / 5 / Distance))
+    Public Overrides Sub Draw(Distance As Decimal, xCoordOfMiddle As Integer, formSize As Size, PlayerZ As Decimal, e As PaintEventArgs, fov As Integer)
+        If (Distance <= 0) Then Exit Sub
+
+        Dim angleOccluded_deg = ToDegrees(2 * Math.Atan(HitBox.Size.Width / (2 * Distance)))
+        Dim percentageOfVisionTaken = angleOccluded_deg / fov
+
+
+        Dim size = New Size((formSize.Height * percentageOfVisionTaken), (formSize.Height * percentageOfVisionTaken))
         Dim Middle = formSize.Height / 2
         Dim yOffset = PlayerZ * (formSize.Height / Distance)
         e.Graphics.FillEllipse(New SolidBrush(Color.Gold), New Rectangle(New Point(xCoordOfMiddle - (size.Width / 2), Middle - (size.Height / 2) + yOffset), size))

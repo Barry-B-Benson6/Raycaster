@@ -25,7 +25,7 @@ Public Class Game
             Dim ray = New Ray(diff)
             rays.Add(ray)
         Next
-        Me.Sight = New Renderer(HUD, rays, ClientPlayer, Me)
+        Me.Sight = New Renderer(HUD, rays, ClientPlayer, Me, fov)
     End Sub
 
     Private ReadOnly Form As Form
