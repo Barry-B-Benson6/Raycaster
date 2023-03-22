@@ -15,12 +15,12 @@ Public Module Constants
     ''' <summary>
     ''' The Fire rate in shots per second
     ''' </summary>
-    Public Const FireRate_s As Decimal = 10
+    Public Const FireRate_s As Decimal = 5
 
     ''' <summary>
     ''' The Speed of a bullet in ms^-1
     ''' </summary>
-    Public Const BulletSpeed_ms As Decimal = 3
+    Public Const BulletSpeed_ms As Decimal = 30
 
     ''' <summary>
     ''' The rate at which the state updates in updates per second

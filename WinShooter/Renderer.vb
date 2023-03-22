@@ -144,7 +144,12 @@ Public Class Renderer
 
             If inFov Then
                 ''Now check if obstructed
-                Dim diff = DifferenceBetweenAngles(Player.Position.Heading_deg, angleOfVector_deg)
+                Dim diff
+                If Player.Position.Heading_deg < angleOfVector_deg Then
+                    diff = DifferenceBetweenAngles(Player.Position.Heading_deg, angleOfVector_deg)
+                Else
+                    diff = DifferenceBetweenAngles(angleOfVector_deg, Player.Position.Heading_deg)
+                End If
                 Dim tempRay = New Ray(diff)
                 Dim collision = tempRay.CheckCollision(Game.Map.map, Player)
                 Dim EntityDistance = LengthOfVector(VectorBetween)
