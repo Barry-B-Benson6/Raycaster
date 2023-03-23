@@ -1,6 +1,6 @@
 ﻿Public Class GameForm
     Private game As Game
-    Public Sub New(serverId As Guid, multiplayerClient As MultiplayerClient)
+    Public Sub New(multiplayerClient As MultiplayerClient)
         DoubleBuffered = True
 
         ' This call is required by the designer.
@@ -39,7 +39,7 @@
 
 
         Dim map = New GameMap(mapValue)
-        game = New Game(New GamePosition(4, 4, 0), map, 90, 360, Me)
+        game = New Game(New GamePosition(4, 4, 0), map, 90, 360, Me, multiplayerClient)
         game.Start()
     End Sub
 End Class

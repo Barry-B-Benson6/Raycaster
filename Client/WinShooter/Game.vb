@@ -1,7 +1,8 @@
 ﻿Imports System.Threading
 Public Class Game
-
-    Public Sub New(initialPositionPLayer As GamePosition, map As GameMap, fov As Integer, resQuality As Integer, form As Form)
+    Private ReadOnly MultiplayerClient As MultiplayerClient
+    Public Sub New(initialPositionPlayer As GamePosition, map As GameMap, fov As Integer, resQuality As Integer, form As Form, MultiplayerClient As MultiplayerClient)
+        Me.MultiplayerClient = MultiplayerClient
 
         AddHandler form.Paint, AddressOf Render
         AddHandler form.KeyDown, AddressOf KeyboardButtonDown
@@ -13,7 +14,7 @@ Public Class Game
 
 
         Me.Form = form
-        Dim ClientPlayer = New Player("Cinnabun", New Motion(initialPositionPLayer, New GameVelocity(0, 0, 0), DateTime.UtcNow), Me, True)
+        Dim ClientPlayer = New Player("Cinnabun", New Motion(initialPositionPlayer, New GameVelocity(0, 0, 0), DateTime.UtcNow), Me, True)
         AddEntity(ClientPlayer)
         Me.Map = map
 
@@ -57,15 +58,26 @@ Public Class Game
         RenderCycle.Start()
     End Sub
 
-    Private Sub funcStateCycle()
+    Private Async Sub funcStateCycle()
         While True
             For i = 0 To Entities.Count - 1
                 Entities.Values(i).UpdateState(DateTime.UtcNow)
                 Entities.Values(i).UpdatePosition(DateTime.UtcNow)
             Next
 
+
             For Each keyValue In Entities
-                If (Not keyValue.Value.IsAlive) Then
+                Dim entity = keyValue.Value
+
+                Dim dirtyEntities As New List(Of Entity)
+                If (entity.isDirty) Then
+                    dirtyEntities.Add(entity)
+                    entity.isDirty = False
+                End If
+                Await MultiplayerClient.SendDirtyEntities(dirtyEntities)
+
+
+                If (Not entity.IsAlive) Then
                     Entities.Remove(keyValue.Key)
                 End If
             Next

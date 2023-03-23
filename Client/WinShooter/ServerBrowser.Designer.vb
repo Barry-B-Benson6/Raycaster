@@ -22,41 +22,52 @@ Partial Class ServerBrowser
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
-        Me.btnCreateGame = New System.Windows.Forms.Button()
-        Me.lstServer = New System.Windows.Forms.ListBox()
-        Me.SuspendLayout()
-        '
-        'btnCreateGame
-        '
-        Me.btnCreateGame.Location = New System.Drawing.Point(77, 364)
-        Me.btnCreateGame.Name = "btnCreateGame"
-        Me.btnCreateGame.Size = New System.Drawing.Size(118, 35)
-        Me.btnCreateGame.TabIndex = 0
-        Me.btnCreateGame.Text = "CreateGame"
-        Me.btnCreateGame.UseVisualStyleBackColor = True
-        '
-        'lstServer
-        '
-        Me.lstServer.FormattingEnabled = True
-        Me.lstServer.ItemHeight = 15
-        Me.lstServer.Location = New System.Drawing.Point(157, 86)
-        Me.lstServer.Name = "lstServer"
-        Me.lstServer.Size = New System.Drawing.Size(120, 94)
-        Me.lstServer.TabIndex = 1
-        '
-        'ServerBrowser
-        '
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 15.0!)
-        Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(800, 450)
-        Me.Controls.Add(Me.lstServer)
-        Me.Controls.Add(Me.btnCreateGame)
-        Me.Name = "ServerBrowser"
-        Me.Text = "ServerBrowser"
-        Me.ResumeLayout(False)
-
+        btnCreateGame = New Button()
+        lstServer = New ListBox()
+        btnJoinGame = New Button()
+        SuspendLayout()
+        ' 
+        ' btnCreateGame
+        ' 
+        btnCreateGame.Location = New Point(77, 364)
+        btnCreateGame.Name = "btnCreateGame"
+        btnCreateGame.Size = New Size(118, 35)
+        btnCreateGame.TabIndex = 0
+        btnCreateGame.Text = "CreateGame"
+        btnCreateGame.UseVisualStyleBackColor = True
+        ' 
+        ' lstServer
+        ' 
+        lstServer.FormattingEnabled = True
+        lstServer.ItemHeight = 15
+        lstServer.Location = New Point(157, 86)
+        lstServer.Name = "lstServer"
+        lstServer.Size = New Size(120, 94)
+        lstServer.TabIndex = 1
+        ' 
+        ' btnJoinGame
+        ' 
+        btnJoinGame.Location = New Point(341, 208)
+        btnJoinGame.Name = "btnJoinGame"
+        btnJoinGame.Size = New Size(118, 35)
+        btnJoinGame.TabIndex = 2
+        btnJoinGame.Text = "JoinGame"
+        btnJoinGame.UseVisualStyleBackColor = True
+        ' 
+        ' ServerBrowser
+        ' 
+        AutoScaleDimensions = New SizeF(7F, 15F)
+        AutoScaleMode = AutoScaleMode.Font
+        ClientSize = New Size(800, 450)
+        Controls.Add(btnJoinGame)
+        Controls.Add(lstServer)
+        Controls.Add(btnCreateGame)
+        Name = "ServerBrowser"
+        Text = "ServerBrowser"
+        ResumeLayout(False)
     End Sub
 
     Friend WithEvents btnCreateGame As Button
     Friend WithEvents lstServer As ListBox
+    Friend WithEvents btnJoinGame As Button
 End Class

@@ -127,7 +127,7 @@ Public MustInherit Class Entity
                 Return _isDirty
             End SyncLock
         End Get
-        Protected Set(value As Boolean)
+        Set(value As Boolean)
             SyncLock Me
                 _isDirty = value
             End SyncLock
