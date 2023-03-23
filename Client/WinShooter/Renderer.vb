@@ -37,7 +37,7 @@ Public Class Renderer
         DrawEntities(e, formSize, CopyOfPlayer)
 
         ''Draw Map
-        ''DrawMap(e, formSize, CopyOfPlayer)
+        'DrawMap(e, formSize, CopyOfPlayer)
 
         HUD.Render(e, formSize)
         e.Graphics.ResetTransform()
