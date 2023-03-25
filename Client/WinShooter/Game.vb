@@ -58,6 +58,12 @@ Public Class Game
         RenderCycle.Start()
     End Sub
 
+    Public Sub UpdateEntities(entityStates As List(Of MultiplayerClient.RequestParams.EntityState))
+        For Each entity In entityStates
+            Console.WriteLine(entity.type_string)
+        Next
+    End Sub
+
     Private Async Sub funcStateCycle()
         While True
             For i = 0 To Entities.Count - 1
@@ -66,19 +72,25 @@ Public Class Game
             Next
 
 
-            For Each keyValue In Entities
-                Dim entity = keyValue.Value
+            For i = 0 To Entities.Count - 1
+                Dim entity = Entities.Values(i)
 
                 Dim dirtyEntities As New List(Of Entity)
                 If (entity.isDirty) Then
+                    Console.WriteLine("Dirty")
                     dirtyEntities.Add(entity)
-                    entity.isDirty = False
+                    Entities.Values(i).isDirty = False
                 End If
-                Await MultiplayerClient.SendDirtyEntities(dirtyEntities)
+                If (dirtyEntities.Count <> 0) Then
+                    MultiplayerClient.SendDirtyEntities(dirtyEntities)
+                End If
 
+            Next
 
-                If (Not entity.IsAlive) Then
-                    Entities.Remove(keyValue.Key)
+            Dim entityList = New List(Of Entity)(Entities.Values)
+            For i = 0 To Entities.Values.Count - 1
+                If (Not entityList(i).IsAlive) Then
+                    Entities.Remove(Entities.Keys(i))
                 End If
             Next
         End While

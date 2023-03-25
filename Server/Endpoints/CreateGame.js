@@ -14,9 +14,9 @@ function string2Bin(str) {
 
 module.exports = {
     name: 'CreateGame',
-    execute(ws,data, Servers) {
-        let server = new Server(data.serverName, data.serverId, data.hostName)
-        server.connectedClients.set( data.clientId, Date.now(),)
+    execute(ws,data, Servers, sockserver) {
+        let server = new Server(data.serverName, data.serverId, data.hostName, sockserver)
+        server.connectedClients.set( data.clientId, Date.now())
         Servers.set(data.serverId, server)
         console.log(Servers)
         ws.send(string2Bin(JSON.stringify({

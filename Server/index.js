@@ -32,12 +32,12 @@ for (const file of EndpointFiles){
 }
 
 
-sockserver.on('connection', ws => {
-    console.log('New client connected')
-    ws.on('close', () => console.log('Client Disconnected'))
+sockserver.on('connection', (ws,req) => {
+    console.log('New client connected: ')
+    ws.on('close', () => console.log('Client Disconnected', ws.readyState))
     ws.on('message', data => {
         let dataObject = JSON.parse(bin2String(data))
-        Endpoints.get(dataObject.endpoint).execute(ws,dataObject,Servers)
+        Endpoints.get(dataObject.endpoint).execute(ws,dataObject,Servers, sockserver)
     })
     ws.onerror = function () {
         console.log('websocket error')

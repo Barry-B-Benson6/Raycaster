@@ -1,4 +1,6 @@
-﻿''' <summary>
+﻿Imports System.Text.Json.Serialization
+
+''' <summary>
 ''' Provides a position and velocity at a certain time and performs calculations to work out a position at
 ''' the current time.
 ''' </summary>
@@ -7,13 +9,14 @@ Public Class Motion
     ''' <summary>
     ''' Creates motion object with its initial position,velocity, and time
     ''' </summary>
-    ''' <param name="Position">Starting position of the motion</param>
-    ''' <param name="Velocity">Starting velocity of the motion</param>
-    ''' <param name="Time">Starting time of the motion object</param>
-    Public Sub New(Position As GamePosition, Velocity As GameVelocity, Time As DateTime)
-        PositionStamp = RequireNotNull(Position)
-        VelocityStamp = RequireNotNull(Velocity)
-        TimeStamp = RequireNotNull(Time)
+    ''' <param name="positionStamp">Starting position of the motion</param>
+    ''' <param name="velocityStamp">Starting velocity of the motion</param>
+    ''' <param name="timeStamp">Starting time of the motion object</param>
+    <JsonConstructor>
+    Public Sub New(positionStamp As GamePosition, velocityStamp As GameVelocity, timeStamp As DateTime)
+        Me.PositionStamp = RequireNotNull(positionStamp)
+        Me.VelocityStamp = RequireNotNull(velocityStamp)
+        Me.TimeStamp = RequireNotNull(timeStamp)
     End Sub
 
     ''' <summary>

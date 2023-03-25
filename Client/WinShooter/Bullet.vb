@@ -16,6 +16,7 @@
 
         If Game.Map.IsWallAt(Me.Position) Then
             Motion = Motion.NotMovingAt(Me.Position, time)
+            isDirty = True
             IsAlive = False
         End If
     End Sub

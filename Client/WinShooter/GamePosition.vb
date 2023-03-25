@@ -1,7 +1,9 @@
 ﻿Imports System.Numerics
+Imports System.Text.Json.Serialization
 
 Public Class GamePosition
 
+    <JsonConstructor>
     Public Sub New(east_m As Decimal, north_m As Decimal, up_m As Decimal, heading_deg As Decimal, tilt_deg As Decimal)
         Me.North_m = north_m
         Me.East_m = east_m
