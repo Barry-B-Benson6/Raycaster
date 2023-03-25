@@ -81,12 +81,12 @@ Public Class MultiplayerClient
 
                             Dim entitys = New List(Of Entity)
 
-                            For Each entityState In data.entityStates
-                                Dim type_String = entityState.type_string
-                                Dim typeObj As Type = Type.GetType(type_String, True)
-                                Dim myObject As Object = Activator.CreateInstance(typeObj, "HI")
-                                Dim myInstance = Convert.ChangeType(myObject, typeObj)
-                            Next
+                            'For Each entityState In data.entityStates
+                            '    Dim type_String = entityState.type_string
+                            '    Dim typeObj As Type = Type.GetType(type_String, True)
+                            '    Dim myObject As Object = Activator.CreateInstance(typeObj, "HI")
+                            '    Dim myInstance = Convert.ChangeType(myObject, typeObj)
+                            'Next
                         End If
 
 

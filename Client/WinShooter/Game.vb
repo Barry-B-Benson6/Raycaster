@@ -99,7 +99,9 @@ Public Class Game
     Private Sub funcRenderCycle()
         While True
             Try
-                Form.Invoke(Sub() Form.Refresh())
+                If (Form.Created) Then
+                    Form.Invoke(Sub() Form.Refresh())
+                End If
             Catch ex As Exception
                 End
             End Try
