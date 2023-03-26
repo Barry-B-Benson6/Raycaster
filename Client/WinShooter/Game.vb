@@ -3,6 +3,7 @@ Public Class Game
     Private ReadOnly MultiplayerClient As MultiplayerClient
     Public Sub New(initialPositionPlayer As GamePosition, map As GameMap, fov As Integer, resQuality As Integer, form As Form, MultiplayerClient As MultiplayerClient)
         Me.MultiplayerClient = MultiplayerClient
+        Me.MultiplayerClient.Game = Me
 
         AddHandler form.Paint, AddressOf Render
         AddHandler form.KeyDown, AddressOf KeyboardButtonDown
@@ -28,6 +29,8 @@ Public Class Game
         Next
         Me.Sight = New Renderer(HUD, rays, ClientPlayer, Me, fov)
     End Sub
+
+    Public Property entityBuffer As New Dictionary(Of Guid, Entity)
 
     Private ReadOnly Form As Form
 
@@ -60,7 +63,7 @@ Public Class Game
 
     Public Sub UpdateEntities(entityStates As List(Of MultiplayerClient.RequestParams.EntityState))
         For Each entity In entityStates
-            Console.WriteLine(entity.type_string)
+            'Console.WriteLine(entity.type_string)
         Next
     End Sub
 
@@ -77,7 +80,7 @@ Public Class Game
 
                 Dim dirtyEntities As New List(Of Entity)
                 If (entity.isDirty) Then
-                    Console.WriteLine("Dirty")
+                    'Console.WriteLine("Dirty")
                     dirtyEntities.Add(entity)
                     Entities.Values(i).isDirty = False
                 End If
@@ -87,8 +90,14 @@ Public Class Game
 
             Next
 
+            Dim copyOfBuffer = New Dictionary(Of Guid, Entity)(entityBuffer)
+
+            'For Each entity In copyOfBuffer.Values
+            '    Entities(entity.EntityId) = entity
+            'Next
+
             Dim entityList = New List(Of Entity)(Entities.Values)
-            For i = 0 To Entities.Values.Count - 1
+            For i = 0 To entityList.Count - 1
                 If (Not entityList(i).IsAlive) Then
                     Entities.Remove(Entities.Keys(i))
                 End If

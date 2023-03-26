@@ -6,8 +6,8 @@
         ' This call is required by the designer.
         InitializeComponent()
 
-        'Me.WindowState = FormWindowState.Maximized
-        'Me.FormBorderStyle = FormBorderStyle.None
+        Me.WindowState = FormWindowState.Maximized
+        Me.FormBorderStyle = FormBorderStyle.None
         ' Add any initialization after the InitializeComponent() call.
         Dim mapValue As Byte(,) = {
             {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},

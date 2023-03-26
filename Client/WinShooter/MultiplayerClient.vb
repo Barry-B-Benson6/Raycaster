@@ -50,7 +50,7 @@ Public Class MultiplayerClient
     Public Async Sub InitializeConnection()
         Try
             Await ws.ConnectAsync(New Uri("ws://localhost:3001"), Nothing)
-            Console.WriteLine(ws.State)
+            'Console.WriteLine(ws.State)
             If (ws.State = WebSocketState.Open) Then
                 Console.WriteLine("Connection opened")
             End If
@@ -61,15 +61,15 @@ Public Class MultiplayerClient
                 Console.WriteLine("Reciever Connection Established")
 
                 While True
-                    Console.WriteLine("Looping")
+                    'Console.WriteLine("Looping")
                     Dim buffer(4096) As Byte
                     Dim result = Await entityReceiver.ReceiveAsync(buffer, CancellationToken.None)
-                    Console.WriteLine("Reciever recieved")
+                    'Console.WriteLine("Reciever recieved")
                     If (result.MessageType = WebSocketMessageType.Close) Then
-                        Console.WriteLine("Receiver connection closing")
+                        'Console.WriteLine("Receiver connection closing")
                         Await entityReceiver.CloseAsync(WebSocketCloseStatus.NormalClosure, Nothing, CancellationToken.None)
                     Else
-                        Console.WriteLine("Entity receiver has recieved a message:")
+                        'Console.WriteLine("Entity receiver has recieved a message:")
                         Dim result_string = Encoding.ASCII.GetString(buffer, 0, result.Count)
 
                         Dim resultObject = JsonSerializer.Deserialize(Of ResponseObjects.LinkReciever)(result_string)
@@ -80,13 +80,34 @@ Public Class MultiplayerClient
                             Dim data = JsonSerializer.Deserialize(Of ResponseObjects.UpdateEntities)(result_string)
 
                             Dim entitys = New List(Of Entity)
+                            'Public Sub New(name As String, initialMovement As Motion, game As Game, locallyOwned As Boolean)
+                            'Public Sub New(name As String, initialMovement As Motion, game As Game, entityId As Guid)
 
-                            'For Each entityState In data.entityStates
-                            '    Dim type_String = entityState.type_string
-                            '    Dim typeObj As Type = Type.GetType(type_String, True)
-                            '    Dim myObject As Object = Activator.CreateInstance(typeObj, "HI")
-                            '    Dim myInstance = Convert.ChangeType(myObject, typeObj)
-                            'Next
+                            If (_HasGame) Then
+                                Console.WriteLine("_______")
+                                Console.WriteLine(data.entityStates.Count)
+                                For Each entitystate In data.entityStates
+                                    Dim type_string = entitystate.type_string
+                                    Dim typeobj As Type = Type.GetType(type_string, True)
+                                    Dim myobject As Object = Activator.CreateInstance(typeobj, entitystate.name, entitystate.motion, Game, entitystate.entityId)
+                                    Dim myinstance = Convert.ChangeType(myobject, typeobj)
+                                    'Console.WriteLine("Entity===={0}", entitystate.entityId)
+                                    'Console.WriteLine(myinstance)
+
+                                    If (Game.Entities.ContainsKey(entitystate.entityId)) Then
+                                        If Not Game.Entities(entitystate.entityId).LocallyOwned Then
+                                            Console.WriteLine("Saving 1{0}", entitystate.type_string)
+                                            myinstance.isDirty = False
+                                            Game.Entities(entitystate.entityId) = myinstance
+                                        End If
+                                    Else
+                                        Console.WriteLine("Saving 2{0}", entitystate.type_string)
+                                        myinstance.isDirty = False
+                                        Game.Entities(entitystate.entityId) = myinstance
+                                    End If
+                                Next
+
+                            End If
                         End If
 
 
@@ -193,7 +214,9 @@ Public Class MultiplayerClient
             Public Property motion As Motion
             Public Property isAlive As Boolean
             Public Property entityId As Guid
+            Public Property name As String
             Public Sub New(entity As Entity)
+                Me.name = entity.Name
                 Me.motion = entity.Motion
                 Me.isAlive = entity.IsAlive
                 Me.entityId = entity.EntityId
@@ -290,6 +313,7 @@ Public Class MultiplayerClient
             Public Property motion As Motion
             Public Property isAlive As Boolean
             Public Property entityId As Guid
+            Public Property name As String
         End Class
     End Class
 End Class

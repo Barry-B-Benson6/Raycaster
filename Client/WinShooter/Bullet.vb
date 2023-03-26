@@ -5,6 +5,12 @@
         Me.Shooter = RequireNotNull(shooter)
     End Sub
 
+    Public Sub New(name As String, initialMovement As Motion, game As Game, entityId As Guid)
+        MyBase.New(name, initialMovement, game, False, New SizeF(0.1, 0.1))
+        Me.EntityId = entityId
+        'Me.Shooter = RequireNotNull(Shooter)
+    End Sub
+
     ''' <summary>
     ''' player who fired the bullet
     ''' </summary>
