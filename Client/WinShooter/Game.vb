@@ -69,6 +69,10 @@ Public Class Game
 
     Private Async Sub funcStateCycle()
         While True
+            For Each KeyValue In entityBuffer
+                Entities(KeyValue.Key) = KeyValue.Value
+            Next
+
             For i = 0 To Entities.Count - 1
                 Entities.Values(i).UpdateState(DateTime.UtcNow)
                 Entities.Values(i).UpdatePosition(DateTime.UtcNow)

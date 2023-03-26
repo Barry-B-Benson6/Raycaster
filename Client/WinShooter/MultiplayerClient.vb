@@ -98,12 +98,12 @@ Public Class MultiplayerClient
                                         If Not Game.Entities(entitystate.entityId).LocallyOwned Then
                                             Console.WriteLine("Saving 1{0}", entitystate.type_string)
                                             myinstance.isDirty = False
-                                            Game.Entities(entitystate.entityId) = myinstance
+                                            Game.entityBuffer(entitystate.entityId) = myinstance
                                         End If
                                     Else
                                         Console.WriteLine("Saving 2{0}", entitystate.type_string)
                                         myinstance.isDirty = False
-                                        Game.Entities(entitystate.entityId) = myinstance
+                                        Game.entityBuffer(entitystate.entityId) = myinstance
                                     End If
                                 Next
 
