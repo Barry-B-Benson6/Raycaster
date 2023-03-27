@@ -30,7 +30,19 @@ Public Class Game
         Me.Sight = New Renderer(HUD, rays, ClientPlayer, Me, fov)
     End Sub
 
-    Public Property entityBuffer As New Dictionary(Of Guid, Entity)
+    Private _entityBuffer As New Dictionary(Of Guid, Entity)
+    Public Property entityBuffer As Dictionary(Of Guid, Entity)
+        Get
+            SyncLock Me
+                Return _entityBuffer
+            End SyncLock
+        End Get
+        Set(value As Dictionary(Of Guid, Entity))
+            SyncLock Me
+                _entityBuffer = value
+            End SyncLock
+        End Set
+    End Property
 
     Private ReadOnly Form As Form
 
@@ -69,7 +81,8 @@ Public Class Game
 
     Private Async Sub funcStateCycle()
         While True
-            For Each KeyValue In entityBuffer
+            Dim copyOfBuffer = New Dictionary(Of Guid, Entity)(entityBuffer)
+            For Each KeyValue In copyOfBuffer
                 Entities(KeyValue.Key) = KeyValue.Value
             Next
 
@@ -93,8 +106,6 @@ Public Class Game
                 End If
 
             Next
-
-            Dim copyOfBuffer = New Dictionary(Of Guid, Entity)(entityBuffer)
 
             'For Each entity In copyOfBuffer.Values
             '    Entities(entity.EntityId) = entity

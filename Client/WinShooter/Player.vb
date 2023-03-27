@@ -92,6 +92,7 @@ Public Class Player
 
         Dim nU_ms = Motion.VelocityStamp.Up_ms - (Constants.G_mss * DateTime.UtcNow.Subtract(Motion.TimeStamp).TotalSeconds * 2)
         If (Position.Up_m = 0 And nU_ms < 0) Then nU_ms = 0
+
         Motion = New Motion(Motion.PositionStamp, New GameVelocity(Motion.VelocityStamp.East_ms, Motion.VelocityStamp.North_ms, nU_ms), time)
         If (LocallyOwned) Then PerformLocallyOwnedUpdateState(time)
     End Sub
@@ -169,6 +170,9 @@ Public Class Player
             nN_m -= Math.Sin(ToRadians(Position.Heading_deg)) * 100
         End If
         Dim newPosition = New GamePosition(Position.East_m, Position.North_m, Position.Up_m, Position.Heading_deg + nH_deg, Position.Tilt_deg + nT_deg)
+        If (nE_m <> Motion.VelocityStamp.East_ms And nN_m <> Motion.VelocityStamp.North_ms) Then
+            isDirty = True
+        End If
         Dim newVelo = New GameVelocity(nE_m, nN_m, Motion.VelocityStamp.Up_ms)
         'If newVelo IsNot Motion.VelocityStamp Then
         '    isDirty = True
@@ -178,7 +182,7 @@ Public Class Player
     Private Sub Jump()
         If Motion.VelocityStamp.Up_ms = 0 Then
             ''5.111 is the initial velocity that causes a jump height of 1.333
-            Dim JumpVel_ms = 40
+            Dim JumpVel_ms = 25
             Motion = New Motion(Position, New GameVelocity(Motion.VelocityStamp.East_ms, Motion.VelocityStamp.North_ms, JumpVel_ms), DateTime.UtcNow)
             isDirty = True
         End If
