@@ -27,8 +27,10 @@ Public Class Renderer
 
         Dim middle = formSize.Height / 2
 
-        e.Graphics.FillRectangle(New SolidBrush(Color.LightBlue), New Rectangle(New Point(0, 0), New Size(Game.formSize.Width, Game.formSize.Height / 2)))
-        e.Graphics.FillRectangle(New SolidBrush(Color.Green), New Rectangle(New Point(0, middle), New Size(Game.formSize.Width, Game.formSize.Height / 2)))
+        Dim yOffsetDuetoLook = Math.Tan(ToRadians(CopyOfPlayer.Position.Tilt_deg)) * middle
+
+        e.Graphics.FillRectangle(New SolidBrush(Color.LightBlue), New Rectangle(New Point(0, 0), New Size(Game.formSize.Width, (Game.formSize.Height / 2) + yOffsetDuetoLook)))
+        e.Graphics.FillRectangle(New SolidBrush(Color.Green), New Rectangle(New Point(0, middle + yOffsetDuetoLook), New Size(Game.formSize.Width, (Game.formSize.Height / 2) - yOffsetDuetoLook)))
 
         ''Draw Walls
         DrawWalls(e, formSize, CopyOfPlayer)
@@ -37,7 +39,7 @@ Public Class Renderer
         DrawEntities(e, formSize, CopyOfPlayer)
 
         ''Draw Map
-        'DrawMap(e, formSize, CopyOfPlayer)
+        DrawMap(e, formSize, CopyOfPlayer)
 
         HUD.Render(e, formSize)
         e.Graphics.ResetTransform()
@@ -124,7 +126,7 @@ Public Class Renderer
                 If (VectorBetween.X > 0) Then
                     ''The vector between is horizontal right
                     angleOfVector_deg = 90
-                ElseIf (VectorBetween.x < 0) Then
+                ElseIf (VectorBetween.X < 0) Then
                     ''The vector between is horizontal left
                     angleOfVector_deg = 270
                 Else
@@ -202,7 +204,10 @@ Public Class Renderer
                         colour = Color.FromArgb(0, 0, 255 * percent)
                 End Select
 
+                Dim yOffsetDueToLookANgle As Decimal = Math.Tan(ToRadians(Player.Position.Tilt_deg)) * ((height - formSize.Height) / 2)
+
                 Dim yOffset = Player.Position.Up_m / Constants.CellSize_m * height
+                yOffset -= yOffsetDueToLookANgle
                 e.Graphics.FillRectangle(New SolidBrush(colour), New Rectangle(New Point(rectLeft, middle - (height / 2) + yOffset), New Size(sectionWidth + 1, height)))
 
             End If

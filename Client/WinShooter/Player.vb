@@ -84,7 +84,14 @@ Public Class Player
         Dim Middle = formSize.Height / 2
         Dim yOffset = PlayerZ * (formSize.Height / Distance)
         Dim img = New Bitmap(My.Resources.Resources.Player_Picture, size)
-        e.Graphics.DrawImage(img, New Point(xCoordOfMiddle - (size.Width / 2), Middle - (size.Height / 2) + yOffset))
+
+        ''Need to get the height offset for the player based on its jump height
+
+        Dim angleBetweenFeetAndGround_deg = ToDegrees(2 * Math.Atan(PlayerZ / (2 * Distance)))
+        Dim percentageOfVisionBetween = angleBetweenFeetAndGround_deg / fov
+        Dim plrHeightOffset = formSize.Height * percentageOfVisionBetween
+
+        e.Graphics.DrawImage(img, New Point(xCoordOfMiddle - (size.Width / 2), Middle - (size.Height / 2) + yOffset - plrHeightOffset))
     End Sub
 
     '''  <remarks>Fire Bullets and update aiming status is crouching</remarks>
