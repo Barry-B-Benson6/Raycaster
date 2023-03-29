@@ -23,14 +23,17 @@ Public Class Renderer
     Private Property OwnPlayer As WinShooter.Player
 
     Public Sub Render(e As PaintEventArgs, formSize As Size)
+        Dim stopwatch = New Stopwatch()
+        stopwatch.Start()
+
         Dim CopyOfPlayer = New Player(OwnPlayer)
 
         Dim middle = formSize.Height / 2
 
         Dim yOffsetDuetoLook = Math.Tan(ToRadians(CopyOfPlayer.Position.Tilt_deg)) * middle
 
-        e.Graphics.FillRectangle(New SolidBrush(Color.LightBlue), New Rectangle(New Point(0, 0), New Size(Game.formSize.Width, (Game.formSize.Height / 2) + yOffsetDuetoLook)))
-        e.Graphics.FillRectangle(New SolidBrush(Color.Green), New Rectangle(New Point(0, middle + yOffsetDuetoLook), New Size(Game.formSize.Width, (Game.formSize.Height / 2) - yOffsetDuetoLook)))
+        'e.Graphics.FillRectangle(New SolidBrush(Color.LightBlue), New Rectangle(New Point(0, 0), New Size(Game.formSize.Width, (Game.formSize.Height / 2) + yOffsetDuetoLook)))
+        'e.Graphics.FillRectangle(New SolidBrush(Color.Green), New Rectangle(New Point(0, middle + yOffsetDuetoLook), New Size(Game.formSize.Width, (Game.formSize.Height / 2) - yOffsetDuetoLook)))
 
         ''Draw Walls
         DrawWalls(e, formSize, CopyOfPlayer)
@@ -39,10 +42,13 @@ Public Class Renderer
         DrawEntities(e, formSize, CopyOfPlayer)
 
         ''Draw Map
-        DrawMap(e, formSize, CopyOfPlayer)
+        ''DrawMap(e, formSize, CopyOfPlayer)
 
         HUD.Render(e, formSize)
         e.Graphics.ResetTransform()
+
+        Dim font = Form.DefaultFont
+        e.Graphics.DrawString((1000 / stopwatch.ElapsedMilliseconds).ToString(), Form.DefaultFont, New SolidBrush(Color.Black), New Point(0, 0))
     End Sub
 
     Private Sub DrawMap(e As PaintEventArgs, formSize As Size, Player As Player)
@@ -170,8 +176,6 @@ Public Class Renderer
     End Sub
 
     Private Sub DrawWalls(e As PaintEventArgs, formSize As Size, Player As Player)
-        Dim stopwatch = New Stopwatch()
-        stopwatch.Start()
 
         Dim middle = formSize.Height / 2
         For i = 0 To Rays.Count - 1
@@ -213,9 +217,6 @@ Public Class Renderer
             End If
 
         Next
-        Dim font = Form.DefaultFont
-        e.Graphics.DrawString((1000 / stopwatch.ElapsedMilliseconds).ToString(), Form.DefaultFont, New SolidBrush(Color.Black), New Point(0, 0))
-        'Console.WriteLine(1000 / stopwatch.ElapsedMilliseconds)
     End Sub
 
     Private Function SeeEntity(Entity As Entity, RayAngleDiff_deg As Decimal, player As Player)
