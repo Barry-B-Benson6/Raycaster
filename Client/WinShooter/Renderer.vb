@@ -2,12 +2,16 @@
 
 Public Class Renderer
 
+    Private Textures As New List(Of Bitmap)
+
     Public Sub New(Hud As HUD, rays As List(Of Ray), ClientPlayer As Player, Game As Game, fov As Integer)
         Me.Game = Game
         Me.HUD = Hud
         Me.Rays = rays
         Me.OwnPlayer = ClientPlayer
         Me.Fov = fov
+
+        Textures.Add(New Bitmap(My.Resources.Textures.PaintedPlaster013_1K_Color, New Size(Constants.TextureQuality, Constants.TextureQuality)))
     End Sub
 
     ''' <summary>
@@ -184,40 +188,61 @@ Public Class Renderer
                 Dim value = collision.Color
                 Dim point = collision.CollisionPoint
 
-                Dim distance = DistanceBetweenTwoPoints(Player.Position.ToCellSpacePointF(), point)
-                Dim sectionWidth = formSize.Width / Rays.Count
-                Dim rectLeft = i * sectionWidth
-
-                Dim Diff = Rays(i).HeadingDiffFromCenterPov_deg
-                distance = Math.Abs(distance * Math.Cos(ToRadians(Diff)))
-
-                Dim height = (formSize.Height / distance)
-                'If (distance < 1) Then height = Me.Height
+                Dim texture = Textures(value - 1)
 
 
-                Dim percent = (height / (formSize.Height)) * 1.6
-                If (percent > 1 Or percent <= 0) Then percent = 1
-
-                Dim colour As Color
-                Select Case value
-                    Case CByte(1)
-                        colour = Color.FromArgb(255 * percent, 255 * percent, 0 * percent)
-                    Case CByte(2)
-                        colour = Color.FromArgb(255 * percent, 0 * percent, 0 * percent)
-                    Case CByte(3)
-                        colour = Color.FromArgb(0, 0, 255 * percent)
-                End Select
-
-                Dim yOffsetDueToLookANgle As Decimal = Math.Tan(ToRadians(Player.Position.Tilt_deg)) * ((height - formSize.Height) / 2)
-
-                Dim yOffset = Player.Position.Up_m / Constants.CellSize_m * height
-                yOffset -= yOffsetDueToLookANgle
-                e.Graphics.FillRectangle(New SolidBrush(colour), New Rectangle(New Point(rectLeft, middle - (height / 2) + yOffset), New Size(sectionWidth + 1, height)))
+                DrawSlice(texture, collision, formSize, e, Player, i)
 
             End If
 
         Next
     End Sub
+
+    Private Function DrawSlice(texture As Bitmap, collision As Ray.Collision, formSize As Size, e As PaintEventArgs, player As Player, i As Integer)
+        Dim collisionPoint = collision.CollisionPoint
+        Dim distance = DistanceBetweenTwoPoints(player.Position.ToCellSpacePointF(), collisionPoint)
+        Dim sectionWidth = formSize.Width / Rays.Count
+        Dim rectLeft = i * sectionWidth
+
+        Dim Diff = Rays(i).HeadingDiffFromCenterPov_deg
+        distance = Math.Abs(distance * Math.Cos(ToRadians(Diff)))
+
+        Dim height = (formSize.Height / distance)
+        'If (distance < 1) Then height = Me.Height
+
+
+        Dim percent = (height / (formSize.Height)) * 1.6
+        If (percent > 1 Or percent <= 0) Then percent = 1
+
+
+        Dim yOffsetDueToLookANgle As Decimal = Math.Tan(ToRadians(player.Position.Tilt_deg)) * ((height - formSize.Height) / 2)
+
+        Dim yOffset = player.Position.Up_m / Constants.CellSize_m * height
+        yOffset -= yOffsetDueToLookANgle
+
+        Dim xIndexInTexture As Integer
+
+        If (collision.isVertical) Then
+            ''Collision is vertical
+            Dim workingY = collisionPoint.Y - Math.Floor(collisionPoint.Y)
+            xIndexInTexture = Math.Floor(workingY * Constants.TextureQuality)
+        Else
+            ''Collision is horizontal
+            Dim workingX = collisionPoint.X - Math.Floor(collisionPoint.X)
+            xIndexInTexture = Math.Floor(workingX * Constants.TextureQuality)
+        End If
+
+        Dim sectionHeight As Decimal = (height / Constants.TextureQuality)
+        Dim brush As SolidBrush
+        For i = 0 To Constants.TextureQuality - 1
+            Dim color = texture.GetPixel(xIndexInTexture, i)
+            If (collision.isVertical) Then color = Color.FromArgb(color.R * 0.7, color.G * 0.7, color.B * 0.7)
+            brush = New SolidBrush(color)
+            Dim topLeft = New Point(rectLeft, (sectionHeight * i) + yOffset)
+            e.Graphics.FillRectangle(brush, New Rectangle(topLeft, New Size(sectionWidth + 1, sectionHeight + 1)))
+        Next
+
+    End Function
 
     Private Function SeeEntity(Entity As Entity, RayAngleDiff_deg As Decimal, player As Player)
         Dim rayAngle_deg = player.Position.Heading_deg + RayAngleDiff_deg

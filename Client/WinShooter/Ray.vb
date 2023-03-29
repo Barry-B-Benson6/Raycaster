@@ -46,25 +46,25 @@ Public Class Ray
                 If (Math.Floor(oldPoint.X) <> Math.Floor(Point.X) And Math.Floor(oldPoint.Y) = Math.Floor(Point.Y)) Then
                     ''Vertical Hit
                     If Math.Floor(oldPoint.X) > Math.Floor(Point.X) Then
-                        collision = New Collision(New PointF(Math.Floor(Point.X) + 1, Point.Y), value)
+                        collision = New Collision(New PointF(Math.Floor(Point.X) + 1, Point.Y), value, True)
                         Return collision
                     Else
-                        collision = New Collision(New PointF(Math.Floor(Point.X), Point.Y), value)
+                        collision = New Collision(New PointF(Math.Floor(Point.X), Point.Y), value, True)
                         Return collision
                     End If
                 ElseIf (Math.Floor(oldPoint.Y) <> Math.Floor(Point.Y) And Math.Floor(oldPoint.X) = Math.Floor(Point.X)) Then
                     ''Horizontal Hit
                     If (Math.Floor(oldPoint.Y) > Math.Floor(Point.Y)) Then
                         ''Coming from Bottom
-                        collision = New Collision(New PointF(Point.X, Math.Floor(Point.Y) + 1), value)
+                        collision = New Collision(New PointF(Point.X, Math.Floor(Point.Y) + 1), value, False)
                         Return collision
                     Else
                         ''Coming From top
-                        collision = New Collision(New PointF(Point.X, Math.Floor(Point.Y)), value)
+                        collision = New Collision(New PointF(Point.X, Math.Floor(Point.Y)), value, False)
                         Return collision
                     End If
                 ElseIf (Math.Floor(oldPoint.Y) <> Math.Floor(Point.Y) And Math.Floor(oldPoint.X) <> Math.Floor(Point.X)) Then
-                    collision = New Collision(New PointF(Point.X, Point.Y), value)
+                    collision = New Collision(New PointF(Point.X, Point.Y), value, False)
                     Return collision
                 End If
 
@@ -86,9 +86,11 @@ Public Class Ray
         ''' </summary>
         ''' <param name="Color">The value on the map at the point of collision</param>
         ''' <param name="pointOfCollision">the point of collision in gamespace</param>
-        Public Sub New(pointOfCollision As PointF, Color As Byte)
+        ''' <param name="Vertical">whether the collision is vertical</param>
+        Public Sub New(pointOfCollision As PointF, Color As Byte, Vertical As Boolean)
             CollisionPoint = RequireNotNull(pointOfCollision)
             Me.Color = Color
+            isVertical = Vertical
         End Sub
 
         Public ReadOnly Property CollisionPoint As PointF
@@ -98,5 +100,7 @@ Public Class Ray
         ''' </summary>
         ''' <returns></returns>
         Public ReadOnly Property Color As Byte
+
+        Public ReadOnly Property isVertical As Boolean
     End Class
 End Class

@@ -26,4 +26,10 @@ Public Module Constants
     ''' The rate at which the state updates in updates per second
     ''' </summary>
     Public Const StateUpdateRate As Integer = 240
+
+    ''' <summary>
+    ''' The quality for wall textures
+    ''' </summary>
+    Public Const TextureQuality As Integer = 32
+
 End Module
