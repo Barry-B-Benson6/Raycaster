@@ -73,7 +73,7 @@ Public Class Player
         Return New Bullet(Me, New Motion(Position, velocity, time), Game, True)
     End Function
 
-    Public Overrides Sub Draw(Distance As Decimal, xCoordOfMiddle As Integer, formSize As Size, PlayerZ As Decimal, e As PaintEventArgs, fov As Integer)
+    Public Overrides Sub Draw(Distance As Decimal, xCoordOfMiddle As Integer, formSize As Size, PlayerZ As Decimal, e As PaintEventArgs, fov As Integer, tilt_deg As Decimal)
         If (Distance <= 0) Then Exit Sub
 
         Dim angleOccluded_deg = ToDegrees(2 * Math.Atan(1.5 / (2 * Distance)))
@@ -90,8 +90,11 @@ Public Class Player
         Dim angleBetweenFeetAndGround_deg = ToDegrees(2 * Math.Atan(PlayerZ / (2 * Distance)))
         Dim percentageOfVisionBetween = angleBetweenFeetAndGround_deg / fov
         Dim plrHeightOffset = formSize.Height * percentageOfVisionBetween
+        yOffset -= plrHeightOffset
+        Dim yOffsetDueToLookANgle As Decimal = Math.Tan(ToRadians(tilt_deg)) * ((size.Height - formSize.Height) / 2)
+        yOffset -= yOffsetDueToLookANgle
 
-        e.Graphics.DrawImage(img, New Point(xCoordOfMiddle - (size.Width / 2), Middle - (size.Height / 2) + yOffset - plrHeightOffset))
+        e.Graphics.DrawImage(img, New Point(xCoordOfMiddle - (size.Width / 2), Middle - (size.Height / 2) + yOffset))
     End Sub
 
     '''  <remarks>Fire Bullets and update aiming status is crouching</remarks>

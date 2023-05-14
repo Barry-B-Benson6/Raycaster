@@ -140,7 +140,7 @@ Public MustInherit Class Entity
         End Get
     End Property
 
-    Public MustOverride Sub Draw(Distance As Decimal, xCoordOfMiddle As Integer, formSize As Size, PlayerZ As Decimal, e As PaintEventArgs, fov As Integer)
+    Public MustOverride Sub Draw(Distance As Decimal, xCoordOfMiddle As Integer, formSize As Size, PlayerZ As Decimal, e As PaintEventArgs, fov As Integer, tilt_deg As Decimal)
     Public MustOverride Sub UpdateState(time As DateTime)
 
     Public Overridable Sub UpdatePosition(time As DateTime)

@@ -30,6 +30,6 @@ Public Module Constants
     ''' <summary>
     ''' The quality for wall textures
     ''' </summary>
-    Public Const TextureQuality As Integer = 32
-
+    Public Const WallTextureQuality As Integer = 32
+    Public Const FloorTextureQuality As Integer = 4
 End Module

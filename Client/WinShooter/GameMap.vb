@@ -1,10 +1,12 @@
 ﻿Imports System.Reflection.Metadata
 
 Public Class GameMap
-    Public Sub New(map As Byte(,))
+    Public Sub New(map As Byte(,), floor As Byte(,))
         RequireNotNull(map)
+        RequireNotNull(floor)
         If Not IsSurroundedByWalls(map) Then Throw New ArgumentException("all maps must have walls corvering every edge")
         Me.map = map
+        Me.floor = floor
     End Sub
 
     ''' <summary>
@@ -14,6 +16,8 @@ Public Class GameMap
         MyBase.New()
     End Sub
     Public ReadOnly Property map As Byte(,)
+
+    Public ReadOnly Property floor As Byte(,)
 
     Private Function IsSurroundedByWalls(map As Byte(,)) As Boolean
         Dim RightIndex = map.GetLength(0) - 1

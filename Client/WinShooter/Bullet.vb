@@ -27,7 +27,7 @@
         End If
     End Sub
 
-    Public Overrides Sub Draw(Distance As Decimal, xCoordOfMiddle As Integer, formSize As Size, PlayerZ As Decimal, e As PaintEventArgs, fov As Integer)
+    Public Overrides Sub Draw(Distance As Decimal, xCoordOfMiddle As Integer, formSize As Size, PlayerZ As Decimal, e As PaintEventArgs, fov As Integer, tilt_deg As Decimal)
         If (Distance <= 0) Then Exit Sub
 
         Dim angleOccluded_deg = ToDegrees(2 * Math.Atan(HitBox.Size.Width / (2 * Distance)))

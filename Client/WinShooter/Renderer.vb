@@ -2,7 +2,8 @@
 
 Public Class Renderer
 
-    Private Textures As New List(Of Bitmap)
+    Private WallTextures As New List(Of Bitmap)
+    Private FloorTextures As New List(Of Bitmap)
 
     Public Sub New(Hud As HUD, rays As List(Of Ray), ClientPlayer As Player, Game As Game, fov As Integer)
         Me.Game = Game
@@ -11,7 +12,9 @@ Public Class Renderer
         Me.OwnPlayer = ClientPlayer
         Me.Fov = fov
 
-        Textures.Add(New Bitmap(My.Resources.Textures.PaintedPlaster013_1K_Color, New Size(Constants.TextureQuality, Constants.TextureQuality)))
+        FloorTextures.Add(New Bitmap(My.Resources.Textures.pixil_frame_0, New Size(Constants.FloorTextureQuality, Constants.FloorTextureQuality)))
+
+        WallTextures.Add(New Bitmap(My.Resources.Textures.PaintedPlaster013_1K_Color, New Size(Constants.WallTextureQuality, Constants.WallTextureQuality)))
     End Sub
 
     ''' <summary>
@@ -172,7 +175,7 @@ Public Class Renderer
 
                 Dim percentInFovThatSightIs = DifferenceBetweenAngles(startFov_deg, angleOfVector_deg) / DifferenceBetweenAngles(startFov_deg, endFov_deg)
                 Dim xCoordToDrawCenter As Integer = Math.Floor(formSize.Width * percentInFovThatSightIs)
-                Entities.Values(i).Draw(EntityDistance, xCoordToDrawCenter, formSize, Player.Position.Up_m, e, Fov)
+                Entities.Values(i).Draw(EntityDistance, xCoordToDrawCenter, formSize, Player.Position.Up_m, e, Fov, Player.Position.Tilt_deg)
 
             End If
 
@@ -188,7 +191,7 @@ Public Class Renderer
                 Dim value = collision.Color
                 Dim point = collision.CollisionPoint
 
-                Dim texture = Textures(value - 1)
+                Dim texture = WallTextures(value - 1)
 
 
                 DrawSlice(texture, collision, formSize, e, Player, i)
@@ -198,7 +201,7 @@ Public Class Renderer
         Next
     End Sub
 
-    Private Function DrawSlice(texture As Bitmap, collision As Ray.Collision, formSize As Size, e As PaintEventArgs, player As Player, i As Integer)
+    Private Function DrawSlice(WallTexture As Bitmap, collision As Ray.Collision, formSize As Size, e As PaintEventArgs, player As Player, i As Integer)
         Dim collisionPoint = collision.CollisionPoint
         Dim distance = DistanceBetweenTwoPoints(player.Position.ToCellSpacePointF(), collisionPoint)
         Dim sectionWidth = formSize.Width / Rays.Count
@@ -208,7 +211,7 @@ Public Class Renderer
         distance = Math.Abs(distance * Math.Cos(ToRadians(Diff)))
 
         Dim height = (formSize.Height / distance)
-        'If (distance < 1) Then height = Me.Height
+        If (distance < 1) Then height = formSize.Height
 
 
         Dim percent = (height / (formSize.Height)) * 1.6
@@ -225,22 +228,54 @@ Public Class Renderer
         If (collision.isVertical) Then
             ''Collision is vertical
             Dim workingY = collisionPoint.Y - Math.Floor(collisionPoint.Y)
-            xIndexInTexture = Math.Floor(workingY * Constants.TextureQuality)
+            xIndexInTexture = Math.Floor(workingY * Constants.WallTextureQuality)
         Else
             ''Collision is horizontal
             Dim workingX = collisionPoint.X - Math.Floor(collisionPoint.X)
-            xIndexInTexture = Math.Floor(workingX * Constants.TextureQuality)
+            xIndexInTexture = Math.Floor(workingX * Constants.WallTextureQuality)
         End If
 
-        Dim sectionHeight As Decimal = (height / Constants.TextureQuality)
+        Dim sectionHeight As Decimal = (height / Constants.WallTextureQuality)
         Dim brush As SolidBrush
-        For i = 0 To Constants.TextureQuality - 1
-            Dim color = texture.GetPixel(xIndexInTexture, i)
+        For i = 0 To Constants.WallTextureQuality - 1
+            Dim color = WallTexture.GetPixel(xIndexInTexture, i)
             If (collision.isVertical) Then color = Color.FromArgb(color.R * 0.7, color.G * 0.7, color.B * 0.7)
             brush = New SolidBrush(color)
             Dim topLeft = New Point(rectLeft, (sectionHeight * i) + yOffset)
             e.Graphics.FillRectangle(brush, New Rectangle(topLeft, New Size(sectionWidth + 1, sectionHeight + 1)))
         Next
+
+        ''Now draw floor
+
+        'Dim firstPxToDraw = ((formSize.Height - height) / 2) + height + yOffset
+        'Dim numOfPx = formSize.Height - firstPxToDraw
+        'If (numOfPx < 0) Then Throw New Exception("neg")
+        'Dim middleY = formSize.Height / 2
+        'For y = firstPxToDraw To numOfPx + firstPxToDraw Step sectionHeight
+        '    Dim corrctedYForMath = y - middleY
+        '    Dim percentY = middleY / corrctedYForMath
+        '    Dim angle = (Fov / 2) * percentY
+        '    Dim dist = (player.Position.Up_m + 1) * Math.Sin(ToRadians(90 - angle))
+
+        '    Dim lineHeading_deg = (Fov - ((rectLeft / formSize.Width) * Fov)) + player.Position.Heading_deg
+
+        '    Dim floorX = player.Position.East_m - (dist * Math.Cos(ToRadians(lineHeading_deg)))
+        '    Dim floorY = player.Position.North_m - (dist * Math.Sin(ToRadians(lineHeading_deg)))
+
+        '    Dim floorTexture = FloorTextures(0)
+
+        '    Dim xIndexInFloorTexture As Integer
+        '    Dim yIndexInFloorTexture As Integer
+
+        '    Dim workingY = floorY - Math.Floor(floorY)
+        '    yIndexInFloorTexture = Math.Floor(workingY * Constants.FloorTextureQuality)
+
+        '    Dim workingX = floorX - Math.Floor(floorX)
+        '    xIndexInFloorTexture = Math.Floor(workingX * Constants.FloorTextureQuality)
+        '    brush = New SolidBrush(floorTexture.GetPixel(xIndexInFloorTexture, yIndexInFloorTexture))
+        '    Dim topLeft = New Point(rectLeft, y)
+        '    e.Graphics.FillRectangle(brush, New Rectangle(topLeft, New Size(sectionWidth, sectionHeight)))
+        'Next
 
     End Function
 
